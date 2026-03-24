@@ -10,7 +10,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
-      <div className="card shadow-2xl animate-fade" style={{ width: '900px', maxWidth: '95vw', maxHeight: '90vh', background: '#fff', display: 'flex', flexDirection: 'column', padding: 0 }}>
+      <div className="card shadow-2xl animate-fade" style={{ width: '1100px', maxWidth: '95vw', maxHeight: '90vh', background: '#fff', display: 'flex', flexDirection: 'column', padding: 0 }}>
         <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderTopLeftRadius: '12px', borderTopRightRadius: '12px' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#2563eb' }}>{title}</h3>
           <button onClick={onClose} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#64748b' }}><X size={20} /></button>
@@ -53,11 +53,11 @@ const Reception = () => {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
             <thead>
               <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
-                <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700 }}>STT</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Ngày tiếp nhận</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Số tiếp nhận</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Dịch vụ</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Nơi thực hiện</th>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700, whiteSpace: 'nowrap' }}>STT</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Ngày tiếp nhận</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Số tiếp nhận</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Dịch vụ</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Nơi thực hiện</th>
               </tr>
             </thead>
             <tbody>
@@ -73,15 +73,23 @@ const Reception = () => {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
             <thead>
               <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
-                <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700 }}>STT</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Ngày khám</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Phòng khám</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Bác sĩ</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Chẩn đoán</th>
+                <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700, whiteSpace: 'nowrap' }}>STT</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Ngày khám</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Phòng khám</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Bác sĩ</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Chẩn đoán</th>
               </tr>
             </thead>
             <tbody>
-              <tr style={{ borderBottom: '1px solid #f1f5f9' }}><td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>Chưa có dữ liệu</td></tr>
+              <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                <td style={{ padding: '12px', textAlign: 'center', whiteSpace: 'nowrap' }}>1</td>
+                <td style={{ padding: '12px', whiteSpace: 'nowrap' }}>24/03/2026 08:50</td>
+                <td style={{ padding: '12px', whiteSpace: 'nowrap' }}>116 - Tai mũi họng</td>
+                <td style={{ padding: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>Nguyễn Thị Bình</td>
+                <td style={{ padding: '12px', color: '#ef4444', fontWeight: 500, lineHeight: '1.4', wordBreak: 'break-word', minWidth: '300px' }}>
+                  H65.2 - Viêm tai giữa xuất tiết mạn tính (Viêm tai giữa thanh dịch mạn tính; Viêm tai giữa mạn tính có dịch tiết không mủ)
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
