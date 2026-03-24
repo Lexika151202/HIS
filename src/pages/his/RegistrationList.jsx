@@ -9,7 +9,7 @@ import {
 
 const RegistrationList = () => {
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'details'
-  const [openDropdown, setOpenDropdown] = useState(0);
+  const [openDropdown, setOpenDropdown] = useState(-1);
   const [selectedPatient, setSelectedPatient] = useState(null);
 
   const mockData = [
