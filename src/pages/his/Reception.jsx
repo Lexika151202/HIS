@@ -45,7 +45,7 @@ const Reception = () => {
 
   return (
     <div className="animate-fade" style={{ background: '#f8fafc', minHeight: '100vh', padding: '1.5rem 2rem' }}>
-      
+
       {/* Modals */}
       <Modal isOpen={showRegPopup} onClose={() => setShowRegPopup(false)} title="Chi tiết các lần đăng ký khám bệnh">
         {renderFilterRow()}
@@ -53,11 +53,11 @@ const Reception = () => {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
             <thead>
               <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
-                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700, whiteSpace: 'nowrap' }}>STT</th>
-                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Ngày tiếp nhận</th>
-                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Số tiếp nhận</th>
-                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Dịch vụ</th>
-                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Nơi thực hiện</th>
+                <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700, whiteSpace: 'nowrap' }}>STT</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Ngày tiếp nhận</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Số tiếp nhận</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Dịch vụ</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700, whiteSpace: 'nowrap' }}>Nơi thực hiện</th>
               </tr>
             </thead>
             <tbody>
@@ -107,7 +107,7 @@ const Reception = () => {
         </div>
       </div>
 
-      {/* I. Search Area Area */}
+      {/* I. Search/Scan Area */}
       <div className="card" style={{ marginBottom: '1.5rem', padding: '1rem', border: 'none', background: 'linear-gradient(90deg, #fff 0%, #f1f5f9 100%)' }}>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <div style={{ position: 'relative', flex: 1 }}>
@@ -115,12 +115,8 @@ const Reception = () => {
             <input
               type="text"
               placeholder="Tìm kiếm nhanh: Nhập Mã BN, Họ tên, CMND hoặc Quét thẻ BHYT..."
-              style={{
-                width: '100%', padding: '1rem 1rem 1rem 3rem',
-                borderRadius: '12px', border: '1px solid #e2e8f0',
-                fontSize: '1rem', outline: 'none', transition: 'all 0.2s',
-                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
-              }}
+              className="modern-input"
+              style={{ width: '100%', paddingLeft: '3rem', height: '54px', borderRadius: '12px' }}
             />
           </div>
           <button className="btn btn-primary" style={{ height: '54px', padding: '0 1.5rem', borderRadius: '12px', background: '#2563eb' }}>
@@ -173,6 +169,16 @@ const Reception = () => {
                 <div><label>Loại tuyến</label><select className="modern-select"><option>Đúng tuyến</option></select></div>
                 <div><label>Khu vực</label><select className="modern-select"><option>Bình thường</option></select></div>
               </div>
+
+              <div className="form-field"><label>Ngày miễn cùng chi trả</label><input type="date" className="modern-input" /></div>
+              <div style={{ gridColumn: 'span 3' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', marginBottom: '8px', display: 'block' }}>Hình thức bảo hiểm</label>
+                <div style={{ display: 'flex', gap: '2rem', padding: '10px 0' }}>
+                  <label className="modern-checkbox"><input type="checkbox" /> <span>Chuyển tuyến điều trị</span></label>
+                  <label className="modern-checkbox"><input type="checkbox" /> <span>Cấp cứu</span></label>
+                  <label className="modern-checkbox"><input type="checkbox" /> <span>Nơi khác đến</span></label>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -185,11 +191,64 @@ const Reception = () => {
               <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>Thông tin hành chính</h3>
               <div style={{ flex: 1, height: '1px', background: '#f1f5f9' }}></div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem 0.75rem' }}>
-               <div className="form-field"><label>Mã bệnh nhân</label><input type="text" className="modern-input" value="BN20240001" readOnly style={{ background: '#f1f5f9' }} /></div>
-               <div className="form-field" style={{ gridColumn: 'span 2' }}><label style={{ color: '#2563eb' }}>Họ và tên bệnh nhân*</label><input type="text" className="modern-input" placeholder="NGUYỄN VĂN A" /></div>
-               <div className="form-field"><label>Giới tính</label><select className="modern-select"><option>Nam</option><option>Nữ</option></select></div>
-               <div className="form-field"><label>Ngày sinh</label><input type="text" className="modern-input" placeholder="dd/mm/yyyy" /></div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem 1rem' }}>
+              {/* Row 1: Personal Basic */}
+              <div className="form-field">
+                <label>Mã bệnh nhân</label>
+                <input type="text" className="modern-input" defaultValue="BN20240001" readOnly style={{ background: '#f1f5f9', color: '#64748b' }} />
+              </div>
+              <div className="form-field" style={{ gridColumn: 'span 2' }}>
+                <label style={{ color: '#2563eb' }}>Họ và tên bệnh nhân*</label>
+                <input type="text" className="modern-input" placeholder="NGUYỄN VĂN A" style={{ fontWeight: 600 }} />
+              </div>
+              <div className="form-field">
+                <label>Giới tính</label>
+                <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', padding: '4px', borderRadius: '8px' }}>
+                  <button style={{ flex: 1, padding: '6px', border: 'none', borderRadius: '6px', background: '#fff', fontSize: '0.8rem', fontWeight: 600, color: '#2563eb' }}>Nam</button>
+                  <button style={{ flex: 1, padding: '6px', border: 'none', borderRadius: '6px', background: 'transparent', fontSize: '0.8rem', color: '#64748b' }}>Nữ</button>
+                  <button style={{ flex: 1, padding: '6px', border: 'none', borderRadius: '6px', background: 'transparent', fontSize: '0.8rem', color: '#64748b' }}>Khác</button>
+                </div>
+              </div>
+              <div className="form-field">
+                <label>Ngày sinh/Tháng/Năm</label>
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  <input type="text" className="modern-input" placeholder="dd/mm/yyyy" style={{ flex: 1 }} />
+                  <div style={{ position: 'relative' }}>
+                    <span style={{ position: 'absolute', top: '-18px', left: '0', fontSize: '0.65rem', color: '#64748b', fontWeight: 600 }}>Tuổi</span>
+                    <input type="text" className="modern-input" placeholder="Tuổi" style={{ width: '60px' }} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 2: Professional & Contact */}
+              <div className="form-field"><label>Số điện thoại</label><input type="text" className="modern-input" placeholder="09xx..." /></div>
+              <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Số thẻ lao động</label><input type="text" className="modern-input" placeholder="Số thẻ LĐ (nếu có)..." /></div>
+              <div className="form-field"><label>Dân tộc</label><select className="modern-select"><option>Kinh</option></select></div>
+              <div className="form-field"><label>Quốc tịch</label><select className="modern-select"><option>Việt Nam</option></select></div>
+
+              {/* Row 3: Workplace & Location */}
+              <div className="form-field"><label>Nghề nghiệp</label><select className="modern-select"><option>Khác</option></select></div>
+              <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Nơi làm việc</label><input type="text" className="modern-input" placeholder="Tên cơ quan, đơn vị công tác..." /></div>
+              <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Khoa / Phòng bệnh nhân</label><input type="text" className="modern-input" placeholder="Khoa/Phòng đang điều trị (nếu có)..." /></div>
+
+              {/* Row 4: Address */}
+              <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Địa chỉ thường trú</label><input type="text" className="modern-input" placeholder="Số nhà, đường..." /></div>
+              <div className="form-field"><label>Tỉnh / Thành phố</label><select className="modern-select"><option>Thành phố Hà Nội</option></select></div>
+              <div className="form-field"><label>Phường / Xã</label><select className="modern-select"><option>Phường Yên Hoà</option></select></div>
+              <div className="form-field"><label>Thôn / Xóm</label><input type="text" className="modern-input" /></div>
+
+              {/* Row 5: Identity */}
+              <div className="form-field" style={{ gridColumn: 'span 1' }}><label>CCCD/Hộ chiếu</label><input type="text" className="modern-input" /></div>
+              <div className="form-field" style={{ gridColumn: 'span 1' }}><label>Ngày cấp</label><input type="date" className="modern-input" /></div>
+              <div className="form-field" style={{ gridColumn: 'span 3' }}><label>Nơi cấp</label><select className="modern-select"><option>Cục Cảnh sát</option></select></div>
+
+              {/* Row 6: Relative */}
+              <div className="form-field"><label>Họ tên người thân</label><input type="text" className="modern-input" placeholder="Họ tên người thân..." /></div>
+              <div className="form-field"><label>Mối quan hệ</label><select className="modern-select"><option>Vợ/Chồng</option><option>Bố/Mẹ</option><option>Con</option><option>Khác</option></select></div>
+              <div className="form-field"><label>CCCD người thân</label><input type="text" className="modern-input" placeholder="Số CCCD..." /></div>
+              <div className="form-field"><label>SĐT người thân</label><input type="text" className="modern-input" placeholder="09xx..." /></div>
+              <div className="form-field"><label>Địa chỉ người thân</label><input type="text" className="modern-input" placeholder="Địa chỉ thân nhân..." /></div>
             </div>
           </div>
 
@@ -202,18 +261,39 @@ const Reception = () => {
               <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>Thông tin đăng ký</h3>
               <div style={{ flex: 1, height: '1px', background: '#f1f5f9' }}></div>
             </div>
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem' }}>
-              <div className="form-field"><label>Số tiếp nhận</label><input type="text" className="modern-input" readOnly value="SN20240324" /></div>
-              <div className="form-field"><label>Số thứ tự</label><input type="text" className="modern-input" readOnly value="14" style={{ background: '#2563eb', color: '#fff' }} /></div>
-              <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Dịch vụ chỉ định</label><select className="modern-select"><option>Khám nội chung</option></select></div>
-              <div className="form-field"><label>Phòng khám</label><select className="modern-select"><option>Phòng 101</option></select></div>
+              <div className="form-field"><label>Số tiếp nhận</label><input type="text" className="modern-input" readOnly value="SN20240324" style={{ background: '#f1f5f9' }} /></div>
+              <div className="form-field"><label>STT khám</label><input type="text" className="modern-input" readOnly value="14" style={{ background: '#f1f5f9', color: '#000000ff' }} /></div>
+              <div className="form-field"><label>Ngày vào viện</label><input type="date" className="modern-input" defaultValue="2026-03-24" /></div>
+              <div className="form-field"><label>Giờ vào viện</label><input type="time" className="modern-input" defaultValue="08:47" /></div>
+              <div className="form-field"><label>Thời gian y lệnh</label><input type="time" className="modern-input" defaultValue="08:50" /></div>
+
+              <div className="form-field" style={{ gridColumn: 'span 2' }}>
+                <label>Dịch vụ chỉ định</label>
+                <select className="modern-select" style={{ height: '48px', fontWeight: 600, color: '#2563eb' }}>
+                  <option>Khám nội chung</option>
+                  <option>Khám Tai Mũi Họng</option>
+                </select>
+              </div>
+              <div className="form-field" style={{ gridColumn: 'span 3' }}>
+                <label>Phòng khám tiếp nhận</label>
+                <select className="modern-select" style={{ height: '48px' }}>
+                  <option>Phòng 101 - Khám nội 1</option>
+                  <option>Phòng 116 - Tai mũi họng</option>
+                </select>
+              </div>
+              <div className="form-field" style={{ gridColumn: 'span 5' }}>
+                <label>Ghi chú</label>
+                <textarea className="modern-input" rows="2" style={{ resize: 'none' }} placeholder="Nhập ghi chú..."></textarea>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Right Sidebar */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'sticky', top: '1.5rem' }}>
-          
+
           <div className="card" style={{ padding: '1.25rem', border: 'none' }}>
             <h4 style={{ fontSize: '0.9rem', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <Activity size={16} color="#2563eb" /> Thông tin tiếp đón
@@ -231,8 +311,8 @@ const Reception = () => {
                 { room: 'Phòng 104', total: 18, wait: 2 },
                 { room: 'Tổng cộng', total: 116, wait: 13, isTotal: true },
               ].map((r, idx) => (
-                <div key={idx} style={{ 
-                  display: 'flex', padding: '0.75rem', 
+                <div key={idx} style={{
+                  display: 'flex', padding: '0.75rem',
                   fontSize: '0.85rem', color: '#1e293b',
                   background: r.isTotal ? '#f8fafc' : (idx % 2 === 0 ? 'transparent' : '#f8fafc'),
                   borderRadius: '8px',
@@ -249,7 +329,7 @@ const Reception = () => {
           <div className="card shadow-sm" style={{ padding: '1rem', border: 'none', background: '#fff' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
               <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>Các lần đăng ký khám bệnh</h4>
-              <button 
+              <button
                 onClick={() => setShowRegPopup(true)}
                 style={{ border: '1px solid #e2e8f0', background: '#fff', padding: '4px', borderRadius: '4px', cursor: 'pointer', color: '#64748b' }}
               >
@@ -264,7 +344,7 @@ const Reception = () => {
           <div className="card shadow-sm" style={{ padding: '1rem', border: 'none', background: '#fff' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
               <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>Lịch sử khám bệnh</h4>
-              <button 
+              <button
                 onClick={() => setShowHistoryPopup(true)}
                 style={{ border: '1px solid #e2e8f0', background: '#fff', padding: '4px', borderRadius: '4px', cursor: 'pointer', color: '#64748b' }}
               >
