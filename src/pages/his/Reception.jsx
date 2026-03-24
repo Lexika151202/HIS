@@ -283,17 +283,17 @@ const Reception = () => {
                 <span style={{ flex: 1, textAlign: 'center' }}>Tổng BN</span>
                 <span style={{ flex: 1, textAlign: 'center' }}>Đang chờ</span>
               </div>
-              
+
               {/* Data Rows */}
               {[
                 { room: 'Phòng 101', total: 42, wait: 8 },
                 { room: 'Phòng 102', total: 31, wait: 3 },
                 { room: 'Phòng 103', total: 25, wait: 0 },
                 { room: 'Phòng 104', total: 18, wait: 2 },
-                { room: 'Tổng cộng', total: 116, wait: 13, isTotal: true },
+                { room: 'Tổng', total: 116, wait: 13, isTotal: true },
               ].map((r, idx) => (
-                <div key={idx} style={{ 
-                  display: 'flex', padding: '0.75rem', 
+                <div key={idx} style={{
+                  display: 'flex', padding: '0.75rem',
                   fontSize: '0.85rem', color: '#1e293b',
                   background: r.isTotal ? '#f8fafc' : (idx % 2 === 0 ? 'transparent' : '#f8fafc'),
                   borderRadius: '8px',
