@@ -1,16 +1,36 @@
 import React, { useState } from 'react';
-import {
-  Search, FileSpreadsheet, Edit3, Calendar, User,
-  Filter, ChevronDown, Stethoscope, CircleDollarSign,
+import { 
+  Search, FileSpreadsheet, Edit3, Calendar, User, 
+  Filter, ChevronDown, Stethoscope, CircleDollarSign, 
   MoreHorizontal, Printer, Trash2, RotateCcw, Save,
   IdCard, QrCode, CreditCard, LogIn, MapPin, Activity,
-  Clock, X, ChevronRight, Maximize2
+  Clock, X, ChevronRight, Maximize2, RefreshCw
 } from 'lucide-react';
+
+const Modal = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
+      <div className="card shadow-2xl animate-fade" style={{ width: '900px', maxWidth: '95vw', maxHeight: '90vh', background: '#fff', display: 'flex', flexDirection: 'column', padding: 0 }}>
+        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderTopLeftRadius: '12px', borderTopRightRadius: '12px' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#2563eb' }}>{title}</h3>
+          <button onClick={onClose} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#64748b' }}><X size={20} /></button>
+        </div>
+        <div style={{ padding: '1.5rem', overflowY: 'auto', flex: 1 }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const RegistrationList = () => {
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'details'
-  const [openDropdown, setOpenDropdown] = useState(-1);
+  const [openDropdown, setOpenDropdown] = useState(-1); 
   const [selectedPatient, setSelectedPatient] = useState(null);
+  
+  const [showRegPopup, setShowRegPopup] = useState(false);
+  const [showHistoryPopup, setShowHistoryPopup] = useState(false);
 
   const mockData = [
     { stt: 2970, date: '24/03/2026 08:47', intakeId: 'TN.01078.2023.03.24.000081', patientId: '0107822001505', name: 'Phạm Thị Dung', dob: '10/11/1960', yob: 1960, gender: 'Nữ', cmnd: '040350017304', target: 'BHYT-L3', insurance: 'HT3404018115580', service: 'Khám Tai Mũi Họng | Khám Tai Mũi Họng', location: '116 | 116 - Phòng khám Tai mũi họng' },
@@ -23,14 +43,90 @@ const RegistrationList = () => {
     setViewMode('details');
   };
 
+  const renderFilterRow = () => (
+    <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', marginBottom: '1.5rem', background: '#f8fafc', padding: '1rem', borderRadius: '10px', border: '1px solid #f1f5f9' }}>
+      <div className="form-field" style={{ flex: 1 }}>
+        <label>Từ ngày</label>
+        <input type="date" className="modern-input" defaultValue="2026-03-24" />
+      </div>
+      <div className="form-field" style={{ flex: 1 }}>
+        <label>Đến ngày</label>
+        <input type="date" className="modern-input" defaultValue="2026-03-24" />
+      </div>
+      <button className="btn btn-primary" style={{ height: '40px', padding: '0 1rem', display: 'flex', alignItems: 'center', gap: '8px', background: '#2563eb' }}>
+        <RefreshCw size={16} /> Làm mới
+      </button>
+    </div>
+  );
+
   if (viewMode === 'details') {
     return (
       <div className="animate-fade" style={{ background: '#f8fafc', minHeight: '100vh', padding: '1.5rem 2rem' }}>
+        
+        {/* Modals */}
+        <Modal isOpen={showRegPopup} onClose={() => setShowRegPopup(false)} title="Chi tiết các lần đăng ký khám bệnh">
+          {renderFilterRow()}
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+              <thead>
+                <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700 }}>STT</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Ngày tiếp nhận</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Số tiếp nhận</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Dịch vụ</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Nơi thực hiện</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '12px', textAlign: 'center' }}>1</td>
+                  <td style={{ padding: '12px' }}>24/03/2026 08:47</td>
+                  <td style={{ padding: '12px', fontWeight: 600 }}>TN.01078.2023.03.24.000081</td>
+                  <td style={{ padding: '12px', color: '#2563eb' }}>Khám Tai Mũi Họng</td>
+                  <td style={{ padding: '12px' }}>116 - Phòng khám Tai mũi họng</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid #f1f5f9', background: '#fcfdfe' }}>
+                  <td style={{ padding: '12px', textAlign: 'center' }}>2</td>
+                  <td style={{ padding: '12px' }}>20/03/2026 14:20</td>
+                  <td style={{ padding: '12px', fontWeight: 600 }}>TN.01078.2023.03.20.000045</td>
+                  <td style={{ padding: '12px', color: '#2563eb' }}>Khám Nội tổng hợp</td>
+                  <td style={{ padding: '12px' }}>114 - Phòng khám Nội</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Modal>
 
-        {/* Detail Header (same as Reception Action Bar) */}
+        <Modal isOpen={showHistoryPopup} onClose={() => setShowHistoryPopup(false)} title="Chi tiết lịch sử khám bệnh">
+          {renderFilterRow()}
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+              <thead>
+                <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
+                  <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700 }}>STT</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Ngày khám</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Phòng khám</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Bác sĩ</th>
+                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Chẩn đoán</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '12px', textAlign: 'center' }}>1</td>
+                  <td style={{ padding: '12px' }}>24/03/2026 08:50</td>
+                  <td style={{ padding: '12px' }}>116 - Tai mũi họng</td>
+                  <td style={{ padding: '12px', fontWeight: 600 }}>Nguyễn Thị Bình</td>
+                  <td style={{ padding: '12px', color: '#ef4444', fontWeight: 500 }}>H65.2 - Viêm tai giữa xuất tiết mạn...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Modal>
+        
+        {/* Detail Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <button
+            <button 
               onClick={() => setViewMode('list')}
               style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}
             >
@@ -42,12 +138,12 @@ const RegistrationList = () => {
             </div>
           </div>
           <div style={{ display: 'flex', gap: '0.75rem' }}>
-            <button className="btn btn-outline" style={{ background: '#fff' }} onClick={() => setViewMode('list')}><RotateCcw size={18} /> Quay lại danh sách</button>
-            <button className="btn btn-primary" style={{ padding: '0.75rem 1.5rem', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}><Save size={18} /> Lưu thay đổi (F11)</button>
+             <button className="btn btn-outline" style={{ background: '#fff' }} onClick={() => setViewMode('list')}><RotateCcw size={18} /> Quay lại danh sách</button>
+             <button className="btn btn-primary" style={{ padding: '0.75rem 1.5rem', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}><Save size={18} /> Lưu thay đổi (F11)</button>
           </div>
         </div>
 
-        {/* Search/Scan Area (from Reception) */}
+        {/* Search/Scan Area */}
         <div className="card" style={{ marginBottom: '1.5rem', padding: '1rem', border: 'none', background: 'linear-gradient(90deg, #fff 0%, #f1f5f9 100%)' }}>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <div style={{ position: 'relative', flex: 1 }}>
@@ -69,10 +165,10 @@ const RegistrationList = () => {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '2rem', alignItems: 'start' }}>
-
-          {/* Main Content Area (FULL RECEPTION FORM) */}
+          
+          {/* Main Content Area */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-
+            
             {/* II. Thông tin thẻ bảo hiểm y tế */}
             <div className="card" style={{ padding: '1.5rem', border: 'none' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
@@ -210,22 +306,19 @@ const RegistrationList = () => {
             </div>
           </div>
 
-          {/* New Sidebar from previous turn */}
+          {/* Sidebar */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'sticky', top: '1.5rem' }}>
-
+            
             <div className="card" style={{ padding: '1.25rem', border: 'none' }}>
               <h4 style={{ fontSize: '0.9rem', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                 <Activity size={16} color="#2563eb" /> Thông tin tiếp đón
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {/* Header Row */}
                 <div style={{ display: 'flex', padding: '0 0.75rem 0.5rem', borderBottom: '1px solid #f1f5f9', fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>
                   <span style={{ flex: 1.5 }}>Phòng khám</span>
                   <span style={{ flex: 1, textAlign: 'center' }}>Tổng BN</span>
                   <span style={{ flex: 1, textAlign: 'center' }}>Đang chờ</span>
                 </div>
-
-                {/* Data Rows */}
                 {[
                   { room: 'Phòng 101', total: 42, wait: 8 },
                   { room: 'Phòng 102', total: 31, wait: 3 },
@@ -233,8 +326,8 @@ const RegistrationList = () => {
                   { room: 'Phòng 104', total: 18, wait: 2 },
                   { room: 'Tổng cộng', total: 116, wait: 13, isTotal: true },
                 ].map((r, idx) => (
-                  <div key={idx} style={{
-                    display: 'flex', padding: '0.75rem',
+                  <div key={idx} style={{ 
+                    display: 'flex', padding: '0.75rem', 
                     fontSize: '0.85rem', color: '#1e293b',
                     background: r.isTotal ? '#f8fafc' : (idx % 2 === 0 ? 'transparent' : '#f8fafc'),
                     borderRadius: '8px',
@@ -249,7 +342,15 @@ const RegistrationList = () => {
             </div>
 
             <div className="card shadow-sm" style={{ padding: '1rem', border: 'none', background: '#fff' }}>
-              <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb', marginBottom: '10px' }}>Các lần đăng ký khám bệnh</h4>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>Các lần đăng ký khám bệnh</h4>
+                <button 
+                  onClick={() => setShowRegPopup(true)}
+                  style={{ border: '1px solid #e2e8f0', background: '#fff', padding: '4px', borderRadius: '4px', cursor: 'pointer', color: '#64748b' }}
+                >
+                  <Maximize2 size={14} />
+                </button>
+              </div>
               <div style={{ border: '1px solid #f1f5f9', borderRadius: '4px' }}>
                 <div style={{ background: '#f8fafc', padding: '8px 10px', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <ChevronDown size={14} /> 24/03/2026
@@ -259,7 +360,15 @@ const RegistrationList = () => {
             </div>
 
             <div className="card shadow-sm" style={{ padding: '1rem', border: 'none', background: '#fff' }}>
-              <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb', marginBottom: '10px' }}>Lịch sử khám bệnh</h4>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>Lịch sử khám bệnh</h4>
+                <button 
+                  onClick={() => setShowHistoryPopup(true)}
+                  style={{ border: '1px solid #e2e8f0', background: '#fff', padding: '4px', borderRadius: '4px', cursor: 'pointer', color: '#64748b' }}
+                >
+                  <Maximize2 size={14} />
+                </button>
+              </div>
               <div style={{ border: '1px solid #f1f5f9', borderRadius: '4px' }}>
                 <div style={{ background: '#f8fafc', padding: '8px 10px', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <ChevronDown size={14} /> 24/03/2026 08:50
@@ -292,7 +401,7 @@ const RegistrationList = () => {
 
   return (
     <div className="animate-fade" style={{ background: '#f8fafc', minHeight: '100vh', padding: '1.5rem' }}>
-
+      
       {/* Search Bar */}
       <div className="card" style={{ padding: '1.25rem', marginBottom: '1.5rem', border: 'none', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
         <h3 style={{ fontSize: '1rem', fontWeight: 600, color: '#334155', marginBottom: '1rem', borderLeft: '4px solid #2563eb', paddingLeft: '12px' }}>Tìm kiếm</h3>
@@ -309,8 +418,8 @@ const RegistrationList = () => {
             <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#64748b', marginBottom: '6px', display: 'block' }}>Đến ngày</label>
             <input type="date" className="modern-input" defaultValue="2026-03-24" style={{ width: '100%' }} />
           </div>
-          <button className="btn btn-primary" style={{ background: '#2563eb', height: '42px', padding: '0 1.5rem' }}>Tìm kiếm</button>
-          <button className="btn btn-outline" style={{ height: '42px', borderColor: '#10b981', color: '#fff', background: '#10b981' }}>
+          <button className="btn btn-primary" style={{ background: '#1e293b', height: '42px', padding: '0 1.5rem' }}>Tìm kiếm</button>
+          <button className="btn btn-outline" style={{ height: '42px', borderColor: '#10b981', color: '#10b981', background: '#fff' }}>
             <FileSpreadsheet size={16} style={{ marginRight: '8px' }} /> Xuất Excel
           </button>
         </div>
@@ -320,7 +429,7 @@ const RegistrationList = () => {
       <div className="card" style={{ padding: '0', border: 'none', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
         <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#2563eb' }}>Danh sách bệnh nhân đã tiếp nhận</h3>
-          {/* <span style={{ background: '#10b981', color: '#fff', fontSize: '0.75rem', fontWeight: 700, padding: '2px 8px', borderRadius: '12px' }}>80</span> */}
+          <span style={{ background: '#10b981', color: '#fff', fontSize: '0.75rem', fontWeight: 700, padding: '2px 8px', borderRadius: '12px' }}>80</span>
         </div>
 
         <div style={{ overflowX: 'auto' }}>
@@ -333,9 +442,9 @@ const RegistrationList = () => {
                 <th style={{ padding: '1rem', color: '#475569', fontWeight: 700 }}>Số tiếp nhận</th>
                 <th style={{ padding: '1rem', color: '#475569', fontWeight: 700 }}>Mã bệnh nhân</th>
                 <th style={{ padding: '1rem', color: '#475569', fontWeight: 700 }}>Tên bệnh nhân</th>
-                <th style={{ padding: '1rem', color: '#475569', fontWeight: 700, textAlign: 'center' }}>Ngày sinh</th>
-                <th style={{ padding: '1rem', color: '#475569', fontWeight: 700, textAlign: 'center' }}>Năm sinh</th>
-                <th style={{ padding: '1rem', color: '#475569', fontWeight: 700, textAlign: 'center' }}>Giới tính</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#475569', fontWeight: 700 }}>Ngày sinh</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#475569', fontWeight: 700 }}>Năm sinh</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#475569', fontWeight: 700 }}>Giới tính</th>
                 <th style={{ padding: '1rem', color: '#475569', fontWeight: 700 }}>CMND</th>
                 <th style={{ padding: '1rem', color: '#475569', fontWeight: 700 }}>Đối tượng</th>
                 <th style={{ padding: '1rem', color: '#475569', fontWeight: 700 }}>Số thẻ BHYT</th>
@@ -345,8 +454,8 @@ const RegistrationList = () => {
             </thead>
             <tbody>
               {mockData.map((row, idx) => (
-                <tr
-                  key={idx}
+                <tr 
+                  key={idx} 
                   style={{ borderBottom: '1px solid #f1f5f9', background: idx % 2 !== 0 ? '#fcfdfe' : '#fff', cursor: 'pointer' }}
                   onClick={() => handleRowClick(row)}
                 >
@@ -355,8 +464,8 @@ const RegistrationList = () => {
                       <button className="action-circle-btn exam-btn" title="Khám bệnh"><Stethoscope size={12} /></button>
                       <button className="action-circle-btn payment-btn" title="Thanh toán"><CircleDollarSign size={12} /></button>
                       <div style={{ position: 'relative' }}>
-                        <button
-                          className={`action-circle-btn more-btn ${openDropdown === idx ? 'active' : ''}`}
+                        <button 
+                          className={`action-circle-btn more-btn ${openDropdown === idx ? 'active' : ''}`} 
                           onClick={() => setOpenDropdown(openDropdown === idx ? -1 : idx)}
                         >
                           <MoreHorizontal size={11} />
