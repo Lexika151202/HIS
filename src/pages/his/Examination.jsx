@@ -4,11 +4,17 @@ import {
   ChevronRight, MoreVertical, ClipboardCheck,
   Stethoscope, XCircle, Eye, Trash2, LayoutGrid,
   Clock, CheckCircle, AlertCircle, RefreshCcw,
-  Activity, Printer, Save, Plus, LogIn, Pill, FileText, History
+  Activity, Printer, Save, Plus, LogIn, Pill, FileText, History, Pencil,
+  ChevronLeft, Minus
 } from 'lucide-react';
 
 const Examination = () => {
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'details'
+  const [showServiceOrder, setShowServiceOrder] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState(['1', '3', '4']); // IDs of expanded categories
+  const [collapseTree, setCollapseTree] = useState(false);
+  const [collapseList, setCollapseList] = useState(false);
+  const [cartExpandedGroups, setCartExpandedGroups] = useState(['KB', 'XN', 'CDHA']);
 
   const mockPatients = [
     { stt: 2660, id: '0107822000811', name: 'Lê Thị Loan', gender: 'Nữ', yob: 1982, target: 'BHYT-L4', insurance: 'GD4010120972718', confirmed: true, date: '23/03/2026', room: '109 | Phòng khám Đông y' },
@@ -20,15 +26,110 @@ const Examination = () => {
   return (
     <div className="animate-fade" style={{ background: '#f8fafc', minHeight: '100vh', padding: '1.5rem 2rem' }}>
 
-      {/* Page Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#0f172a' }}>
+      {/* Modern Page Header */}
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'flex-start', 
+        marginBottom: '2rem',
+        background: 'linear-gradient(to right, #fff, #f8fafc)',
+        padding: '1.25rem 1.5rem',
+        borderRadius: '16px',
+        boxShadow: '0 4px 20px -5px rgba(0,0,0,0.05)',
+        border: '1px solid #fff'
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b', fontSize: '0.8rem', fontWeight: 500 }}>
+            <span>Phần mềm HIS</span>
+            <ChevronRight size={14} />
+            <span style={{ color: '#2563eb' }}>Khám bệnh</span>
+            {viewMode === 'details' && (
+              <>
+                <ChevronRight size={14} />
+                <span style={{ color: '#94a3b8' }}>Chi tiết bệnh nhân</span>
+              </>
+            )}
+          </div>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em', margin: 0 }}>
             {viewMode === 'list' ? 'Danh sách khám bệnh' : 'Chi tiết khám bệnh'}
           </h1>
+          <div style={{ display: 'flex', gap: '16px', marginTop: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></div>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Đang khám: <b style={{ color: '#0f172a' }}>12</b></span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b' }}></div>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Đang chờ: <b style={{ color: '#0f172a' }}>45</b></span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6' }}></div>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Hoàn thành: <b style={{ color: '#0f172a' }}>120</b></span>
+            </div>
+          </div>
         </div>
+
         <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button className="btn btn-primary" onClick={() => window.location.reload()}><RefreshCcw size={18} /> Làm mới</button>
+          <div style={{ display: 'flex', background: '#fff', padding: '4px', borderRadius: '10px', border: '1px solid #e2e8f0', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+            <button 
+              onClick={() => setViewMode('list')}
+              style={{ 
+                padding: '8px 16px', 
+                borderRadius: '6px', 
+                border: 'none', 
+                background: viewMode === 'list' ? '#f1f5f9' : 'transparent',
+                color: viewMode === 'list' ? '#2563eb' : '#64748b',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <List size={16} /> Danh sách
+            </button>
+            <button 
+              onClick={() => setViewMode('details')}
+              style={{ 
+                padding: '8px 16px', 
+                borderRadius: '6px', 
+                border: 'none', 
+                background: viewMode === 'details' ? '#f1f5f9' : 'transparent',
+                color: viewMode === 'details' ? '#2563eb' : '#64748b',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <Eye size={16} /> Chi tiết
+            </button>
+          </div>
+          
+          <button 
+            className="btn btn-outline" 
+            onClick={() => window.location.reload()}
+            style={{ 
+              height: '44px',
+              padding: '0 1.25rem',
+              borderRadius: '10px',
+              background: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.2s'
+            }}
+          >
+            <RefreshCcw size={18} color="#64748b" /> 
+            <span style={{ color: '#475569', fontWeight: 600 }}>Cập nhật</span>
+          </button>
+          
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)' }}>
+            <User size={20} color="#fff" />
+          </div>
         </div>
       </div>
 
@@ -274,7 +375,7 @@ const Examination = () => {
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb' }}>Chi định dịch vụ</h3>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button className="btn btn-outline btn-sm"><Printer size={16} /> In phiếu</button>
-                    <button className="btn btn-primary btn-sm"><Plus size={16} /> Thêm chỉ định</button>
+                    <button className="btn btn-primary btn-sm" onClick={() => setShowServiceOrder(true)}><Plus size={16} /> Thêm chỉ định</button>
                   </div>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
@@ -360,11 +461,11 @@ const Examination = () => {
                     { date: '16/02/2022 09:34', clinic: '114 - Phòng khám Nội 1- Nhi', doctor: 'Trần Văn A', diag: 'I10 - Tăng huyết áp' }
                   ].map((item, i) => (
                     <div key={i} style={{ position: 'relative', paddingLeft: '20px', borderLeft: '2px solid #e2e8f0' }}>
-                      <div style={{ 
-                        position: 'absolute', left: '-7px', top: '0', 
-                        width: '12px', height: '12px', borderRadius: '50%', 
-                        background: i === 0 ? '#2563eb' : '#fff', 
-                        border: '2px solid #2563eb' 
+                      <div style={{
+                        position: 'absolute', left: '-7px', top: '0',
+                        width: '12px', height: '12px', borderRadius: '50%',
+                        background: i === 0 ? '#2563eb' : '#fff',
+                        border: '2px solid #2563eb'
                       }}></div>
                       <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563eb', marginBottom: '4px' }}>{item.date}</div>
                       <div style={{ background: '#f8fafc', padding: '10px', borderRadius: '8px', fontSize: '0.8rem', color: '#1e293b' }}>
@@ -375,10 +476,10 @@ const Examination = () => {
                     </div>
                   ))}
                 </div>
-                
-                <button 
-                  className="btn btn-outline" 
-                   style={{ width: '100%', marginTop: '1.5rem', fontSize: '0.85rem' }}
+
+                <button
+                  className="btn btn-outline"
+                  style={{ width: '100%', marginTop: '1.5rem', fontSize: '0.85rem' }}
                 >
                   <Eye size={16} /> Xem tất cả lịch sử
                 </button>
@@ -420,9 +521,470 @@ const Examination = () => {
           transition: all 0.2s;
         }
         .btn-sidebar:hover { background: #f8fafc; border-color: #2563eb; color: #2563eb; }
+
+        .service-tree-item { 
+          padding: 6px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; border-radius: 6px; 
+          transition: all 0.2s; font-size: 0.85rem; color: #475569; position: relative;
+        }
+        .service-tree-item:hover { background: #eff6ff; color: #2563eb; }
+        .service-tree-item.active { background: #2563eb; color: #fff; font-weight: 600; }
+        .service-tree-item .tree-chevron { width: 16px; display: flex; justify-content: center; }
+        
+        .service-list-item { border-bottom: 1px solid #f1f5f9; transition: background 0.2s; }
+        .service-list-item:hover { background: #fcfdfe; }
+        
+        /* Compact table styles */
+        .compact-table th { 
+          background: #f1f5f9; color: #475569; font-size: 0.7rem; font-weight: 700; 
+          padding: 6px 4px; border: 1px solid #e2e8f0;
+          white-space: nowrap;
+        }
+        .compact-table td { 
+          padding: 4px; border: 1px solid #e2e8f0; font-size: 0.75rem; color: #1e293b;
+          height: 32px;
+        }
+        .patient-info-card {
+          background: #fff; border-radius: 12px; padding: 16px 32px;
+          display: flex; gap: 250px; align-items: center; justify-content: center;
+          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+          margin-bottom: 4px; z-index: 10;
+        }
       `}</style>
+
+      {/* Service Order Full-page Overlay */}
+      {showServiceOrder && (
+        <div className="animate-fade" style={{ position: 'fixed', inset: 0, background: '#f1f5f9', zIndex: 1000, display: 'flex', flexDirection: 'column' }}>
+          {/* Header with Modern Patient Info Card */}
+          <div style={{ padding: '16px 2rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+            <div className="patient-info-card">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#3b82f610', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <User size={24} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.025em' }}>Bệnh nhân</div>
+                    <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1e293b' }}>Bùi Văn Kính <span style={{ fontWeight: 400, color: '#64748b', fontSize: '0.9rem' }}>(Nam - 57 tuổi)</span></div>
+                    <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Mã BN: <span style={{ color: '#3b82f6', fontWeight: 600 }}>0107822002729</span></div>
+                  </div>
+                </div>
+
+                <div style={{ height: '40px', width: '1px', background: '#e2e8f0' }} />
+
+                <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start' }}>
+                  <div style={{ minWidth: '150px' }}>
+                    <div style={{ marginBottom: '8px' }}>
+                      <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '2px' }}>Bảo hiểm y tế</div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#334155' }}>GD4010120960736</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '2px' }}>Phòng khám</div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 500, color: '#334155' }}>114 - Nội 1</div>
+                    </div>
+                  </div>
+
+                  <div style={{ maxWidth: '400px' }}>
+                    <div style={{ marginBottom: '4px' }}>
+                      <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '2px' }}>Chẩn đoán</div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#334155' }}>
+                        D64.9 | Thiếu máu không đặc hiệu
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: '1.4' }}>
+                      Bệnh nhân khám ngày 24/3/26 tại Bệnh viện Phổi Hà Nội, tình trạng sức khỏe ổn định...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ background: '#f8fafc', padding: '12px 20px', borderRadius: '10px', border: '1px solid #e2e8f0', minWidth: '220px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '4px' }}>
+                  <span style={{ color: '#64748b' }}>Tổng tiền:</span>
+                  <span style={{ fontWeight: 700, color: '#1e293b' }}>36.500</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '4px' }}>
+                  <span style={{ color: '#64748b' }}>BHYT:</span>
+                  <span style={{ fontWeight: 600, color: '#10b981' }}>- 36.500</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', paddingTop: '4px', borderTop: '1px dashed #cbd5e1' }}>
+                  <span style={{ fontWeight: 600, color: '#1e293b' }}>Thực thu:</span>
+                  <span style={{ fontWeight: 800, color: '#ef4444' }}>0 VNĐ</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+            {/* Left Column: Category Tree */}
+            {!collapseTree ? (
+              <div style={{ width: '260px', background: '#fff', borderRight: '1px solid #e2e8f0', overflowY: 'auto', padding: '1rem', position: 'relative', transition: 'width 0.3s' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>NHÓM DỊCH VỤ</h3>
+                  <button onClick={() => setCollapseTree(true)} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}><ChevronLeft size={16} /></button>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <div className="service-tree-item active">
+                    <span className="tree-chevron"><LayoutGrid size={14} /></span>
+                    Tất cả dịch vụ
+                  </div>
+
+                  {/* 1. Khám bệnh */}
+                  <div style={{ marginTop: '4px' }}>
+                    <div
+                      className="service-tree-item"
+                      style={{ fontWeight: expandedGroups.includes('1') ? 700 : 500 }}
+                      onClick={() => setExpandedGroups(prev => prev.includes('1') ? prev.filter(i => i !== '1') : [...prev, '1'])}
+                    >
+                      <span className="tree-chevron">
+                        {expandedGroups.includes('1') ? <ChevronRight size={14} style={{ transform: 'rotate(90deg)' }} /> : <ChevronRight size={14} />}
+                      </span>
+                      1. Khám bệnh
+                    </div>
+                    {expandedGroups.includes('1') && (
+                      <div style={{ paddingLeft: '22px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <div className="service-tree-item">Khám bệnh</div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 3. Xét nghiệm */}
+                  <div style={{ marginTop: '2px' }}>
+                    <div
+                      className="service-tree-item"
+                      style={{ fontWeight: expandedGroups.includes('3') ? 700 : 500 }}
+                      onClick={() => setExpandedGroups(prev => prev.includes('3') ? prev.filter(i => i !== '3') : [...prev, '3'])}
+                    >
+                      <span className="tree-chevron">
+                        {expandedGroups.includes('3') ? <ChevronRight size={14} style={{ transform: 'rotate(90deg)' }} /> : <ChevronRight size={14} />}
+                      </span>
+                      3. Xét nghiệm
+                    </div>
+                    {expandedGroups.includes('3') && (
+                      <div style={{ paddingLeft: '22px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <div className="service-tree-item">XN Huyết học</div>
+                        <div className="service-tree-item">XN Sinh hóa</div>
+                        <div className="service-tree-item">XN Vi sinh</div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 4. CDHA */}
+                  <div style={{ marginTop: '2px' }}>
+                    <div
+                      className="service-tree-item"
+                      style={{ fontWeight: expandedGroups.includes('4') ? 700 : 500 }}
+                      onClick={() => setExpandedGroups(prev => prev.includes('4') ? prev.filter(i => i !== '4') : [...prev, '4'])}
+                    >
+                      <span className="tree-chevron">
+                        {expandedGroups.includes('4') ? <ChevronRight size={14} style={{ transform: 'rotate(90deg)' }} /> : <ChevronRight size={14} />}
+                      </span>
+                      4. Chẩn đoán hình ảnh
+                    </div>
+                    {expandedGroups.includes('4') && (
+                      <div style={{ paddingLeft: '22px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <div className="service-tree-item">X-Quang</div>
+                        <div className="service-tree-item">Siêu âm</div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="service-tree-item"><span className="tree-chevron"><ChevronRight size={14} /></span> 5. Thăm dò chức năng</div>
+                  <div className="service-tree-item"><span className="tree-chevron"><ChevronRight size={14} /></span> 6. Phẫu thuật</div>
+                  <div className="service-tree-item"><span className="tree-chevron"><ChevronRight size={14} /></span> 7. Thủ thuật</div>
+                </div>
+              </div>
+            ) : (
+              <div style={{ width: '40px', background: '#fff', borderRight: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem 0' }}>
+                <button onClick={() => setCollapseTree(false)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }} title="Mở rộng Nhóm dịch vụ"><ChevronRight size={20} /></button>
+                <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', marginTop: '20px', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>NHÓM DỊCH VỤ</div>
+              </div>
+            )}
+
+            {/* Middle Column: Service Selection Table */}
+            {!collapseList ? (
+              <div style={{ width: '420px', display: 'flex', flexDirection: 'column', background: '#fcfdfe', borderRight: '1px solid #e2e8f0', transition: 'width 0.3s' }}>
+                <div style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0', background: '#fff' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>DANH SÁCH DỊCH VỤ</h3>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      {/* <label style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}><input type="checkbox" checked readOnly /> Nhóm</label> */}
+                      <button onClick={() => setCollapseList(true)} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}><ChevronLeft size={16} /></button>
+                    </div>
+                  </div>
+                  <div style={{ position: 'relative' }}>
+                    <input type="text" className="modern-input" placeholder="Mã / tên dịch vụ..." style={{ width: '100%', paddingRight: '40px' }} />
+                    <Search size={18} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                  </div>
+                  <div style={{ marginTop: '8px', fontSize: '0.7rem', color: '#ef4444' }}>(*) Theo ngày 25/03/2026</div>
+                </div>
+
+                <div style={{ flex: 1, overflowY: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead style={{ position: 'sticky', top: 0, background: '#f8fafc', zIndex: 10 }}>
+                      <tr>
+                        <th style={{ padding: '0.75rem 0.75rem', textAlign: 'center', width: '50px' }}>STT</th>
+                        <th style={{ padding: '0.75rem 1rem 0.75rem 0', textAlign: 'left' }}>Dịch vụ</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { code: '22.0121.1369', name: 'fg Tổng phân tích tế bào máu ngoại vi', bh: '49.700', bv: '49.700' },
+                        { code: 'CKMP', name: 'fg Công khám miễn phí', bh: '0', bv: '0' },
+                        { code: 'DMKT_0023', name: 'fg AFB trực tiếp nhuộm Ziehl-Neelsen', bh: '74.200', bv: '74.200' },
+                        { code: 'DVKT_0001', name: 'fg AFB trực tiếp nhuộm huỳnh quang', bh: '71.600', bv: '71.600' },
+                        { code: 'DVKT_0002', name: 'fg Bó thuốc', bh: '57.600', bv: '57.600' }
+                      ].map((s, idx) => (
+                        <tr key={idx} className="service-list-item">
+                          <td style={{ padding: '0.75rem 0.75rem', textAlign: 'center' }}>
+                            <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>{idx + 1}</span>
+                          </td>
+                          <td style={{ padding: '0.75rem 1rem 0.75rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1e293b', lineHeight: '1.4', wordBreak: 'break-word' }}>
+                                {s.code} - {s.name}
+                              </div>
+                              <div style={{ display: 'flex', gap: '1.5rem', marginTop: '4px', fontSize: '0.75rem' }}>
+                                <span style={{ color: '#64748b' }}>BHYT: <span style={{ color: '#10b981', fontWeight: 600 }}>{s.bh}</span></span>
+                                <span style={{ color: '#64748b' }}>Viện: <span style={{ color: '#ef4444', fontWeight: 600 }}>{s.bv}</span></span>
+                              </div>
+                            </div>
+                            <button
+                              className="btn btn-primary"
+                              style={{ width: '24px', height: '24px', padding: 0, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgb(37 99 235 / 0.2)', flexShrink: 0 }}
+                            >
+                              <Plus size={14} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : (
+              <div style={{ width: '40px', background: '#fff', borderRight: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem 0' }}>
+                <button onClick={() => setCollapseList(false)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }} title="Mở rộng Danh sách"><ChevronRight size={20} /></button>
+                <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', marginTop: '20px', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>DANH SÁCH DỊCH VỤ</div>
+              </div>
+            )}
+
+            {/* Right Column: Order Cart (Wider) */}
+            <div style={{ flex: 1, background: '#fff', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ padding: '16px 1rem', borderBottom: '1px solid #f1f5f9', background: '#f8fafc', display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
+                <div className="form-field" style={{ flex: 2 }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Bác sĩ chỉ định</label>
+                  <select className="modern-select" style={{ height: '38px', fontSize: '0.85rem', padding: '0 12px' }}>
+                    <option>V080103 | Nguyễn Ngọc Ánh</option>
+                  </select>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', flex: 3 }}>
+                  <div className="form-field" style={{ flex: 1 }}>
+                    <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Ngày yêu cầu</label>
+                    <input type="date" className="modern-input" defaultValue="2026-03-25" style={{ height: '38px', fontSize: '0.85rem', padding: '0 12px' }} />
+                  </div>
+                  <div className="form-field">
+                    <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Giờ</label>
+                    <input type="time" className="modern-input" defaultValue="09:03" style={{ height: '38px', fontSize: '0.85rem', width: '90px', padding: '0 10px' }} />
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                <div style={{ padding: '8px 1rem', background: '#fff', borderBottom: '1px solid #e2e8f0' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>DỊCH VỤ CHỈ ĐỊNH</h3>
+                </div>
+                <div style={{ flex: 1, overflowX: 'auto', padding: '0 1rem 1rem 1rem' }}>
+                  <table className="compact-table" style={{ width: '100%', borderCollapse: 'collapse', minWidth: '1200px' }}>
+                    <thead>
+                      <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                        <th style={{ textAlign: 'center', padding: '12px 8px' }}><input type="checkbox" checked readOnly /></th>
+                        <th style={{ textAlign: 'center', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>STT</th>
+                        <th style={{ textAlign: 'left', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Mã</th>
+                        <th style={{ textAlign: 'left', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem', width: '250px' }}>Tên dịch vụ</th>
+                        <th style={{ textAlign: 'center', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>SL</th>
+                        <th style={{ textAlign: 'left', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Loại giá</th>
+                        <th style={{ textAlign: 'right', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Đơn giá</th>
+                        <th style={{ textAlign: 'right', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Thành tiền</th>
+                        <th style={{ textAlign: 'right', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>BHYT trả</th>
+                        <th style={{ textAlign: 'right', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>BN trả</th>
+                        <th style={{ textAlign: 'center', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Ngày yêucầu</th>
+                        <th style={{ textAlign: 'center', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Giường</th>
+                        <th style={{ textAlign: 'left', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>PP vô cảm</th>
+                        <th style={{ textAlign: 'left', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Bác sĩ</th>
+                        <th style={{ textAlign: 'center', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style={{ border: 'none', cursor: 'pointer' }} onClick={() => setCartExpandedGroups(prev => prev.includes('KB') ? prev.filter(i => i !== 'KB') : [...prev, 'KB'])}>
+                        <td colSpan="17" style={{ padding: '12px 0 4px 0' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: '#eff6ff', borderRadius: '6px', width: 'fit-content' }}>
+                            <div style={{ background: '#3b82f6', borderRadius: '4px', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {!cartExpandedGroups.includes('KB') ? <ChevronRight size={10} color="#fff" /> : <Minus size={10} color="#fff" />}
+                            </div>
+                            <span style={{ fontWeight: 700, color: '#1d4ed8', fontSize: '0.75rem', letterSpacing: '0.025em' }}>Khám bệnh (1)</span>
+                          </div>
+                        </td>
+                      </tr>
+                      {cartExpandedGroups.includes('KB') && (
+                        <tr className="hover-row" style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ textAlign: 'center', padding: '10px 8px' }}><input type="checkbox" checked readOnly /></td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#94a3b8', fontSize: '0.8rem' }}>1</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#64748b', fontSize: '0.8rem' }}>001.01</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', fontWeight: 600, color: '#334155', fontSize: '0.85rem' }}>Khám Nội tổng hợp</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', fontWeight: 600 }}>1</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px' }}>
+                          <span style={{ padding: '2px 8px', borderRadius: '12px', background: '#dcfce7', color: '#166534', fontSize: '0.7rem', fontWeight: 600 }}>Giá BHYT</span>
+                        </td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#475569' }}>36.500</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', fontWeight: 700, color: '#1e293b' }}>36.500</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#10b981', fontWeight: 600 }}>36.500</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#ef4444', fontWeight: 600 }}>0</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#64748b' }}>25/03/2026</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#64748b' }}>G-102</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#64748b' }}>Tê tại chỗ</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#1e293b', fontWeight: 500 }}>Nguyễn Ngọc Ánh</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px' }}>
+                          <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                            <div title="Sửa" style={{ width: '28px', height: '28px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #e2e8f0', background: '#fff' }}>
+                              <Pencil size={12} color="#3b82f6" />
+                            </div>
+                            <div title="Xóa" style={{ width: '28px', height: '28px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #fee2e2', background: '#fff' }}>
+                              <Trash2 size={12} color="#ef4444" />
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      )}
+
+                      <tr style={{ border: 'none', cursor: 'pointer' }} onClick={() => setCartExpandedGroups(prev => prev.includes('XN') ? prev.filter(i => i !== 'XN') : [...prev, 'XN'])}>
+                        <td colSpan="17" style={{ padding: '16px 0 4px 0' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: '#eff6ff', borderRadius: '6px', width: 'fit-content' }}>
+                            <div style={{ background: '#3b82f6', borderRadius: '4px', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {!cartExpandedGroups.includes('XN') ? <ChevronRight size={10} color="#fff" /> : <Minus size={10} color="#fff" />}
+                            </div>
+                            <span style={{ fontWeight: 700, color: '#1d4ed8', fontSize: '0.75rem', letterSpacing: '0.025em' }}>Xét nghiệm (2)</span>
+                          </div>
+                        </td>
+                      </tr>
+                      {cartExpandedGroups.includes('XN') && (
+                        <>
+                          <tr className="hover-row" style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ textAlign: 'center', padding: '10px 8px' }}><input type="checkbox" checked readOnly /></td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#94a3b8', fontSize: '0.8rem' }}>2</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#64748b', fontSize: '0.8rem' }}>22.0121.1369</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', fontWeight: 600, color: '#334155', fontSize: '0.85rem' }}>Tổng phân tích tế bào máu ngoại vi</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', fontWeight: 600 }}>1</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px' }}>
+                          <span style={{ padding: '2px 8px', borderRadius: '12px', background: '#dcfce7', color: '#166534', fontSize: '0.7rem', fontWeight: 600 }}>Giá BHYT</span>
+                        </td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#475569' }}>49.700</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', fontWeight: 700, color: '#1e293b' }}>49.700</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#10b981', fontWeight: 600 }}>49.700</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#ef4444', fontWeight: 600 }}>0</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#64748b' }}>25/03/2026</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#64748b' }}>G-102</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#cbd5e1' }}>--</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#1e293b', fontWeight: 500 }}>Nguyễn Ngọc Ánh</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px' }}>
+                          <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                            <div title="Sửa" style={{ width: '28px', height: '28px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #e2e8f0', background: '#fff' }}>
+                              <Pencil size={12} color="#3b82f6" />
+                            </div>
+                            <div title="Xóa" style={{ width: '28px', height: '28px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #fee2e2', background: '#fff' }}>
+                              <Trash2 size={12} color="#ef4444" />
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className="hover-row" style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ textAlign: 'center', padding: '10px 8px' }}><input type="checkbox" checked readOnly /></td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#94a3b8', fontSize: '0.8rem' }}>3</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#64748b', fontSize: '0.8rem' }}>DMKT_0023</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', fontWeight: 600, color: '#334155', fontSize: '0.85rem' }}>AFB trực tiếp nhuộm Ziehl-Neelsen</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', fontWeight: 600 }}>1</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px' }}>
+                          <span style={{ padding: '2px 8px', borderRadius: '12px', background: '#dcfce7', color: '#166534', fontSize: '0.7rem', fontWeight: 600 }}>Giá BHYT</span>
+                        </td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#475569' }}>74.200</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', fontWeight: 700, color: '#1e293b' }}>74.200</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#10b981', fontWeight: 600 }}>74.200</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#ef4444', fontWeight: 600 }}>0</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#64748b' }}>25/03/2026</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#64748b' }}>G-102</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#cbd5e1' }}>--</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#1e293b', fontWeight: 500 }}>Nguyễn Ngọc Ánh</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px' }}>
+                          <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                            <div title="Sửa" style={{ width: '28px', height: '28px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #e2e8f0', background: '#fff' }}>
+                              <Pencil size={12} color="#3b82f6" />
+                            </div>
+                            <div title="Xóa" style={{ width: '28px', height: '28px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #fee2e2', background: '#fff' }}>
+                              <Trash2 size={12} color="#ef4444" />
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      </>
+                      )}
+
+                      <tr style={{ border: 'none', cursor: 'pointer' }} onClick={() => setCartExpandedGroups(prev => prev.includes('CDHA') ? prev.filter(i => i !== 'CDHA') : [...prev, 'CDHA'])}>
+                        <td colSpan="17" style={{ padding: '16px 0 4px 0' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: '#eff6ff', borderRadius: '6px', width: 'fit-content' }}>
+                            <div style={{ background: '#3b82f6', borderRadius: '4px', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {!cartExpandedGroups.includes('CDHA') ? <ChevronRight size={10} color="#fff" /> : <Minus size={10} color="#fff" />}
+                            </div>
+                            <span style={{ fontWeight: 700, color: '#1d4ed8', fontSize: '0.75rem', letterSpacing: '0.025em' }}>Chẩn đoán hình ảnh (1)</span>
+                          </div>
+                        </td>
+                      </tr>
+                      {cartExpandedGroups.includes('CDHA') && (
+                        <tr className="hover-row" style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ textAlign: 'center', padding: '10px 8px' }}><input type="checkbox" checked readOnly /></td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#94a3b8', fontSize: '0.8rem' }}>4</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#64748b', fontSize: '0.8rem' }}>XQ_001</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', fontWeight: 600, color: '#334155', fontSize: '0.85rem' }}>X-Quang Ngực thẳng</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', fontWeight: 600 }}>1</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px' }}>
+                          <span style={{ padding: '2px 8px', borderRadius: '12px', background: '#dcfce7', color: '#166534', fontSize: '0.7rem', fontWeight: 600 }}>Giá BHYT</span>
+                        </td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#475569' }}>120.000</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', fontWeight: 700, color: '#1e293b' }}>120.000</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#10b981', fontWeight: 600 }}>120.000</td>
+                        <td style={{ textAlign: 'right', padding: '10px 8px', color: '#ef4444', fontWeight: 600 }}>0</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#64748b' }}>25/03/2026</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px', color: '#64748b' }}>G-102</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#cbd5e1' }}>--</td>
+                        <td style={{ textAlign: 'left', padding: '10px 8px', color: '#1e293b', fontWeight: 500 }}>Nguyễn Ngọc Ánh</td>
+                        <td style={{ textAlign: 'center', padding: '10px 8px' }}>
+                          <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                            <div title="Sửa" style={{ width: '28px', height: '28px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #e2e8f0', background: '#fff' }}>
+                              <Pencil size={12} color="#3b82f6" />
+                            </div>
+                            <div title="Xóa" style={{ width: '28px', height: '28px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #fee2e2', background: '#fff' }}>
+                              <Trash2 size={12} color="#ef4444" />
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div style={{ padding: '1rem', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: '8px', background: '#f8fafc' }}>
+            <button className="btn btn-outline" onClick={() => setShowServiceOrder(false)} style={{ background: '#fff' }}>Đóng (Esc)</button>
+            <button className="btn btn-outline" style={{ background: '#fff' }}><Printer size={16} /> In</button>
+            <button className="btn btn-primary" onClick={() => setShowServiceOrder(false)} style={{ padding: '0 2rem' }}><Save size={16} /> Lưu</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Examination;
+
