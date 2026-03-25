@@ -5,7 +5,8 @@ import {
   MoreHorizontal, Printer, Trash2, RotateCcw, Save, Settings,
   IdCard, QrCode, CreditCard, LogIn, MapPin, Activity,
   Clock, X, ChevronRight, Maximize2, RefreshCw, Edit, ClipboardCheck,
-  Pill, FileText, CheckCircle, AlertCircle, Plus, History, Eye, XCircle
+  Pill, FileText, CheckCircle, AlertCircle, Plus, History, Eye, XCircle,
+  LayoutGrid, ChevronLeft, Minus, Pencil
 } from 'lucide-react';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
@@ -45,6 +46,11 @@ const RegistrationList = () => {
   const [showActionDropdown, setShowActionDropdown] = useState(false);
   const [historyExpandedVisits, setHistoryExpandedVisits] = useState(['1']);
   const [historyActiveTabs, setHistoryActiveTabs] = useState({ '1': 'services', '2': 'services', '3': 'services' });
+  const [showServiceOrder, setShowServiceOrder] = useState(false);
+  const [collapseTree, setCollapseTree] = useState(false);
+  const [collapseList, setCollapseList] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState(['1', '3', '4']);
+  const [cartExpandedGroups, setCartExpandedGroups] = useState(['KB', 'XN', 'CDHA']);
 
   const toggleHistoryVisit = (id) => {
     if (historyExpandedVisits.includes(id)) {
@@ -150,9 +156,10 @@ const RegistrationList = () => {
     </div>
   );
 
-  if (viewMode === 'details') {
-    return (
-      <div className="animate-fade" style={{ background: '#f8fafc', minHeight: '100vh', padding: '1.5rem 2rem' }}>
+  return (
+    <div style={{ background: '#f8fafc', minHeight: '100vh' }}>
+      {viewMode === 'details' ? (
+        <div className="animate-fade" style={{ background: '#f8fafc', minHeight: '100vh', padding: '1.5rem 2rem' }}>
         {/* Modals */}
         <Modal isOpen={showRegPopup} onClose={() => setShowRegPopup(false)} title="Các lần đăng ký khám bệnh">
           {renderFilterRow()}
@@ -688,7 +695,7 @@ const RegistrationList = () => {
                     <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb' }}>Chỉ định dịch vụ</h3>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <button className="btn btn-outline btn-sm"><Printer size={16} /> In phiếu</button>
-                      <button className="btn btn-primary btn-sm"><Plus size={16} /> Thêm chỉ định</button>
+                      <button className="btn btn-primary btn-sm" onClick={() => setShowServiceOrder(true)}><Plus size={16} /> Thêm chỉ định</button>
                     </div>
                   </div>
                   <div style={{ overflowX: 'auto' }}>
@@ -1045,12 +1052,8 @@ const RegistrationList = () => {
           @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         `}</style>
       </div>
-    );
-  }
-
-  // --- LIST VIEW ---
-  return (
-    <div className="animate-fade" style={{ background: '#f8fafc', minHeight: '100vh', padding: '1.5rem' }}>
+    ) : (
+      <div className="animate-fade" style={{ background: '#f8fafc', minHeight: '100vh', padding: '1.5rem' }}>
       {/* Search Bar */}
       <div className="card" style={{ padding: '1.25rem', marginBottom: '1.5rem', border: 'none' }}>
         <h3 style={{ fontSize: '1rem', fontWeight: 600, color: '#334155', marginBottom: '1rem', borderLeft: '4px solid #2563eb', paddingLeft: '12px' }}>Tìm kiếm</h3>
@@ -1142,9 +1145,11 @@ const RegistrationList = () => {
             </tbody>
           </table>
         </div>
+        </div>
       </div>
+    )}
 
-      <style>{`
+    <style>{`
         .action-circle-btn { width: 22px; height: 22px; border-radius: 50%; border: 1px solid #e2e8f0; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; padding: 0; }
         .action-circle-btn:hover { transform: scale(1.1); }
         .action-dropdown { position: absolute; top: 100%; left: 0; margin-top: 4px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; min-width: 110px; z-index: 50; padding: 4px 0; }
@@ -1158,7 +1163,336 @@ const RegistrationList = () => {
         .form-field label { font-size: 0.8rem; font-weight: 600; color: #475569; }
         .modern-input, .modern-select { padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0; background: #fff; font-size: 0.85rem; outline: none; transition: all 0.2s; }
         .modern-input:focus, .modern-select:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+        
+        .service-tree-item { 
+          padding: 6px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; border-radius: 6px; 
+          transition: all 0.2s; font-size: 0.85rem; color: #475569; position: relative;
+        }
+        .service-tree-item:hover { background: #eff6ff; color: #2563eb; }
+        .service-tree-item.active { background: #2563eb; color: #fff; font-weight: 600; }
+        .service-tree-item .tree-chevron { width: 16px; display: flex; justify-content: center; }
+        
+        .service-list-item { border-bottom: 1px solid #f1f5f9; transition: background 0.2s; }
+        .service-list-item:hover { background: #fcfdfe; }
+
+        .compact-table th { 
+          background: #f1f5f9; color: #475569; font-size: 0.7rem; font-weight: 700; 
+          padding: 6px 4px; border: 1px solid #e2e8f0;
+          white-space: nowrap;
+        }
+        .compact-table td { 
+          padding: 4px; border: 1px solid #e2e8f0; font-size: 0.75rem; color: #1e293b;
+          height: 32px;
+        }
+        .patient-info-card {
+          background: #fff; border-radius: 12px; padding: 16px 32px;
+          display: flex; gap: 250px; align-items: center; justify-content: center;
+          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+          margin-bottom: 4px; z-index: 10;
+        }
       `}</style>
+
+      {/* Service Order Full-page Overlay */}
+      {showServiceOrder && (
+        <div className="animate-fade" style={{ position: 'fixed', inset: 0, background: '#f1f5f9', zIndex: 1100, display: 'flex', flexDirection: 'column' }}>
+          {/* Header with Patient Info Card */}
+          <div style={{ padding: '16px 2rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+            <div className="patient-info-card">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#3b82f610', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <User size={24} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.025em' }}>Bệnh nhân</div>
+                    <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1e293b' }}>
+                      {selectedPatient?.name} <span style={{ fontWeight: 400, color: '#64748b', fontSize: '0.9rem' }}>({selectedPatient?.gender} - {2026 - selectedPatient?.yob} tuổi)</span>
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Mã BN: <span style={{ color: '#3b82f6', fontWeight: 600 }}>{selectedPatient?.patientId}</span></div>
+                  </div>
+                </div>
+
+                <div style={{ height: '40px', width: '1px', background: '#e2e8f0' }} />
+
+                <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start' }}>
+                  <div style={{ minWidth: '150px' }}>
+                    <div style={{ marginBottom: '8px' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '2px' }}>Bảo hiểm y tế</div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#334155' }}>{selectedPatient?.insurance}</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '2px' }}>Phòng khám</div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 500, color: '#334155' }}>{selectedPatient?.location}</div>
+                    </div>
+                  </div>
+
+                  <div style={{ maxWidth: '400px' }}>
+                    <div style={{ marginBottom: '4px' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '2px' }}>Chẩn đoán</div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#2563eb' }}>
+                        M54 - Đau lưng (Dorsalgia)
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: '1.4' }}>
+                      Bệnh nhân có tiền sử đau thắt lưng mạn tính, đợt này đau tăng kèm theo hạn chế vận động...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ background: '#f8fafc', padding: '12px 20px', borderRadius: '10px', border: '1px solid #e2e8f0', minWidth: '220px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '4px' }}>
+                  <span style={{ color: '#64748b' }}>Tổng tiền:</span>
+                  <span style={{ fontWeight: 700, color: '#1e293b' }}>36.500</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '4px' }}>
+                  <span style={{ color: '#64748b' }}>BHYT:</span>
+                  <span style={{ fontWeight: 600, color: '#10b981' }}>- 36.500</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', paddingTop: '4px', borderTop: '1px dashed #cbd5e1' }}>
+                  <span style={{ fontWeight: 600, color: '#1e293b' }}>Thực thu:</span>
+                  <span style={{ fontWeight: 800, color: '#ef4444' }}>0 VNĐ</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+            {/* Left Column: Category Tree */}
+            {!collapseTree ? (
+              <div style={{ width: '260px', background: '#fff', borderRight: '1px solid #e2e8f0', overflowY: 'auto', padding: '1rem', position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>NHÓM DỊCH VỤ</h3>
+                  <button onClick={() => setCollapseTree(true)} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}><ChevronLeft size={16} /></button>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <div className="service-tree-item active">
+                    <span className="tree-chevron"><LayoutGrid size={14} /></span>
+                    Tất cả dịch vụ
+                  </div>
+
+                  <div style={{ marginTop: '4px' }}>
+                    <div
+                      className="service-tree-item"
+                      style={{ fontWeight: expandedGroups.includes('1') ? 700 : 500 }}
+                      onClick={() => setExpandedGroups(prev => prev.includes('1') ? prev.filter(i => i !== '1') : [...prev, '1'])}
+                    >
+                      <span className="tree-chevron">
+                        {expandedGroups.includes('1') ? <ChevronRight size={14} style={{ transform: 'rotate(90deg)' }} /> : <ChevronRight size={14} />}
+                      </span>
+                      1. Khám bệnh
+                    </div>
+                    {expandedGroups.includes('1') && (
+                      <div style={{ paddingLeft: '22px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <div className="service-tree-item">Khám bệnh</div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{ marginTop: '2px' }}>
+                    <div
+                      className="service-tree-item"
+                      style={{ fontWeight: expandedGroups.includes('3') ? 700 : 500 }}
+                      onClick={() => setExpandedGroups(prev => prev.includes('3') ? prev.filter(i => i !== '3') : [...prev, '3'])}
+                    >
+                      <span className="tree-chevron">
+                        {expandedGroups.includes('3') ? <ChevronRight size={14} style={{ transform: 'rotate(90deg)' }} /> : <ChevronRight size={14} />}
+                      </span>
+                      3. Xét nghiệm
+                    </div>
+                    {expandedGroups.includes('3') && (
+                      <div style={{ paddingLeft: '22px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <div className="service-tree-item">XN Huyết học</div>
+                        <div className="service-tree-item">XN Sinh hóa</div>
+                        <div className="service-tree-item">XN Vi sinh</div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{ marginTop: '2px' }}>
+                    <div
+                      className="service-tree-item"
+                      style={{ fontWeight: expandedGroups.includes('4') ? 700 : 500 }}
+                      onClick={() => setExpandedGroups(prev => prev.includes('4') ? prev.filter(i => i !== '4') : [...prev, '4'])}
+                    >
+                      <span className="tree-chevron">
+                        {expandedGroups.includes('4') ? <ChevronRight size={14} style={{ transform: 'rotate(90deg)' }} /> : <ChevronRight size={14} />}
+                      </span>
+                      4. Chẩn đoán hình ảnh
+                    </div>
+                    {expandedGroups.includes('4') && (
+                      <div style={{ paddingLeft: '22px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <div className="service-tree-item">X-Quang</div>
+                        <div className="service-tree-item">Siêu âm</div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="service-tree-item"><span className="tree-chevron"><ChevronRight size={14} /></span> 5. Thăm dò chức năng</div>
+                  <div className="service-tree-item"><span className="tree-chevron"><ChevronRight size={14} /></span> 6. Phẫu thuật</div>
+                  <div className="service-tree-item"><span className="tree-chevron"><ChevronRight size={14} /></span> 7. Thủ thuật</div>
+                </div>
+              </div>
+            ) : (
+              <div style={{ width: '40px', background: '#fff', borderRight: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem 0' }}>
+                <button onClick={() => setCollapseTree(false)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><ChevronRight size={20} /></button>
+                <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', marginTop: '20px', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>NHÓM DỊCH VỤ</div>
+              </div>
+            )}
+
+            {/* Middle Column: Service Selection Table */}
+            {!collapseList ? (
+              <div style={{ width: '420px', display: 'flex', flexDirection: 'column', background: '#fcfdfe', borderRight: '1px solid #e2e8f0' }}>
+                <div style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0', background: '#fff' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>DANH SÁCH DỊCH VỤ</h3>
+                    <button onClick={() => setCollapseList(true)} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}><ChevronLeft size={16} /></button>
+                  </div>
+                  <div style={{ position: 'relative' }}>
+                    <input type="text" className="modern-input" placeholder="Mã / tên dịch vụ..." style={{ width: '100%', paddingRight: '40px' }} />
+                    <Search size={18} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                  </div>
+                </div>
+
+                <div style={{ flex: 1, overflowY: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead style={{ position: 'sticky', top: 0, background: '#f8fafc', zIndex: 10 }}>
+                      <tr>
+                        <th style={{ padding: '0.75rem 0.75rem', textAlign: 'center', width: '50px' }}>STT</th>
+                        <th style={{ padding: '0.75rem 1rem 0.75rem 0', textAlign: 'left' }}>Dịch vụ</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { code: '22.0121.1369', name: 'Tổng phân tích tế bào máu ngoại vi', bh: '49.700', bv: '49.700' },
+                        { code: 'CKMP', name: 'Công khám miễn phí', bh: '0', bv: '0' },
+                        { code: 'DMKT_0023', name: 'AFB trực tiếp nhuộm Ziehl-Neelsen', bh: '74.200', bv: '74.200' },
+                      ].map((s, idx) => (
+                        <tr key={idx} className="service-list-item">
+                          <td style={{ padding: '0.75rem 0.75rem', textAlign: 'center' }}><span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>{idx + 1}</span></td>
+                          <td style={{ padding: '0.75rem 1rem 0.75rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1e293b' }}>{s.code} - {s.name}</div>
+                              <div style={{ display: 'flex', gap: '1.5rem', marginTop: '4px', fontSize: '0.75rem' }}>
+                                <span style={{ color: '#64748b' }}>BHYT: <span style={{ color: '#10b981', fontWeight: 600 }}>{s.bh}</span></span>
+                                <span style={{ color: '#64748b' }}>Viện: <span style={{ color: '#ef4444', fontWeight: 600 }}>{s.bv}</span></span>
+                              </div>
+                            </div>
+                            <button className="btn btn-primary" style={{ width: '24px', height: '24px', padding: 0, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <Plus size={14} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : (
+              <div style={{ width: '40px', background: '#fff', borderRight: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem 0' }}>
+                <button onClick={() => setCollapseList(false)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><ChevronRight size={20} /></button>
+                <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', marginTop: '20px', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>DANH SÁCH DỊCH VỤ</div>
+              </div>
+            )}
+
+            {/* Right Column: Order Cart (Wider) */}
+            <div style={{ flex: 1, background: '#fff', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ padding: '16px 1rem', borderBottom: '1px solid #f1f5f9', background: '#f8fafc', display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
+                <div className="form-field" style={{ flex: 2 }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Bác sĩ chỉ định</label>
+                  <select className="modern-select" style={{ height: '38px', fontSize: '0.85rem', padding: '0 12px' }}>
+                    <option>V080103 | Nguyễn Ngọc Ánh</option>
+                  </select>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', flex: 3 }}>
+                  <div className="form-field" style={{ flex: 1 }}>
+                    <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Ngày yêu cầu</label>
+                    <input type="date" className="modern-input" defaultValue="2026-03-25" style={{ height: '38px', fontSize: '0.85rem', padding: '0 12px' }} />
+                  </div>
+                  <div className="form-field">
+                    <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Giờ</label>
+                    <input type="time" className="modern-input" defaultValue="09:03" style={{ height: '38px', fontSize: '0.85rem', width: '90px', padding: '0 10px' }} />
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                <div style={{ padding: '8px 1rem', background: '#fff', borderBottom: '1px solid #e2e8f0' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>DỊCH VỤ CHỈ ĐỊNH</h3>
+                </div>
+                <div style={{ flex: 1, overflowX: 'auto', padding: '0 1rem 1rem 1rem' }}>
+                  <table className="compact-table" style={{ width: '100%', borderCollapse: 'collapse', minWidth: '1200px' }}>
+                    <thead>
+                      <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                        <th style={{ textAlign: 'center', padding: '12px 8px' }}><input type="checkbox" checked readOnly /></th>
+                        <th style={{ textAlign: 'center', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>STT</th>
+                        <th style={{ textAlign: 'left', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Mã</th>
+                        <th style={{ textAlign: 'left', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem', width: '250px' }}>Tên dịch vụ</th>
+                        <th style={{ textAlign: 'center', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>SL</th>
+                        <th style={{ textAlign: 'left', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Loại giá</th>
+                        <th style={{ textAlign: 'right', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Đơn giá</th>
+                        <th style={{ textAlign: 'right', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Thành tiền</th>
+                        <th style={{ textAlign: 'right', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>BHYT trả</th>
+                        <th style={{ textAlign: 'right', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>BN trả</th>
+                        <th style={{ textAlign: 'center', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Ngày yêu cầu</th>
+                        <th style={{ textAlign: 'center', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Giường</th>
+                        <th style={{ textAlign: 'left', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>PP vô cảm</th>
+                        <th style={{ textAlign: 'left', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Bác sĩ</th>
+                        <th style={{ textAlign: 'center', padding: '12px 8px', color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style={{ border: 'none', cursor: 'pointer' }} onClick={() => setCartExpandedGroups(prev => prev.includes('KB') ? prev.filter(i => i !== 'KB') : [...prev, 'KB'])}>
+                        <td colSpan="15" style={{ padding: '12px 0 4px 0' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: '#eff6ff', borderRadius: '6px', width: 'fit-content' }}>
+                            <div style={{ background: '#3b82f6', borderRadius: '4px', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {!cartExpandedGroups.includes('KB') ? <ChevronRight size={10} color="#fff" /> : <Minus size={10} color="#fff" />}
+                            </div>
+                            <span style={{ fontWeight: 700, color: '#1d4ed8', fontSize: '0.75rem', letterSpacing: '0.025em' }}>Khám bệnh (1)</span>
+                          </div>
+                        </td>
+                      </tr>
+                      {cartExpandedGroups.includes('KB') && (
+                        <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                          <td style={{ textAlign: 'center', padding: '10px 8px' }}><input type="checkbox" checked readOnly /></td>
+                          <td style={{ textAlign: 'center', padding: '10px 8px', color: '#94a3b8', fontSize: '0.8rem' }}>1</td>
+                          <td style={{ textAlign: 'left', padding: '10px 8px', color: '#64748b', fontSize: '0.8rem' }}>001.01</td>
+                          <td style={{ textAlign: 'left', padding: '10px 8px', fontWeight: 600, color: '#334155', fontSize: '0.85rem' }}>Khám Nội tổng hợp</td>
+                          <td style={{ textAlign: 'center', padding: '10px 8px', fontWeight: 600 }}>1</td>
+                          <td style={{ textAlign: 'left', padding: '10px 8px' }}>
+                            <span style={{ padding: '2px 8px', borderRadius: '12px', background: '#dcfce7', color: '#166534', fontSize: '0.7rem', fontWeight: 600 }}>Giá BHYT</span>
+                          </td>
+                          <td style={{ textAlign: 'right', padding: '10px 8px', color: '#475569' }}>36.500</td>
+                          <td style={{ textAlign: 'right', padding: '10px 8px', fontWeight: 700, color: '#1e293b' }}>36.500</td>
+                          <td style={{ textAlign: 'right', padding: '10px 8px', color: '#10b981', fontWeight: 600 }}>36.500</td>
+                          <td style={{ textAlign: 'right', padding: '10px 8px', color: '#ef4444', fontWeight: 600 }}>0</td>
+                          <td style={{ textAlign: 'center', padding: '10px 8px', color: '#64748b' }}>25/03/2026</td>
+                          <td style={{ textAlign: 'center', padding: '10px 8px', color: '#64748b' }}>G-102</td>
+                          <td style={{ textAlign: 'left', padding: '10px 8px', color: '#64748b' }}>Tê tại chỗ</td>
+                          <td style={{ textAlign: 'left', padding: '10px 8px', color: '#1e293b', fontWeight: 500 }}>Nguyễn Ngọc Ánh</td>
+                          <td style={{ textAlign: 'center', padding: '10px 8px' }}>
+                            <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                              <Pencil size={14} color="#3b82f6" cursor="pointer" />
+                              <Trash2 size={14} color="#ef4444" cursor="pointer" />
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div style={{ padding: '1rem', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: '8px', background: '#f8fafc' }}>
+                <button className="btn btn-outline" onClick={() => setShowServiceOrder(false)} style={{ background: '#fff' }}>Đóng (Esc)</button>
+                <button className="btn btn-outline" style={{ background: '#fff' }}><Printer size={16} /> In</button>
+                <button className="btn btn-primary" onClick={() => setShowServiceOrder(false)} style={{ padding: '0 2rem' }}><Save size={16} /> Lưu</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
