@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import {
   Search, FileSpreadsheet, Edit3, Calendar, User,
   Filter, ChevronDown, Stethoscope, CircleDollarSign,
-  MoreHorizontal, Printer, Trash2, RotateCcw, Save,
+  MoreHorizontal, Printer, Trash2, RotateCcw, Save, Settings,
   IdCard, QrCode, CreditCard, LogIn, MapPin, Activity,
   Clock, X, ChevronRight, Maximize2, RefreshCw, Edit, ClipboardCheck,
-  Settings, Pill, FileText, CheckCircle, AlertCircle, Plus, History, Eye
+  Pill, FileText, CheckCircle, AlertCircle, Plus, History, Eye, XCircle
 } from 'lucide-react';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
@@ -39,8 +39,88 @@ const RegistrationList = () => {
 
   const [showRegPopup, setShowRegPopup] = useState(false);
   const [showHistoryPopup, setShowHistoryPopup] = useState(false);
+  const [showFullHistoryModal, setShowFullHistoryModal] = useState(false);
+  const [selectedHistoryVisitId, setSelectedHistoryVisitId] = useState('1');
   const [detailMode, setDetailMode] = useState('overview'); // 'overview', 'payment', 'examination'
   const [showActionDropdown, setShowActionDropdown] = useState(false);
+  const [historyExpandedVisits, setHistoryExpandedVisits] = useState(['1']);
+  const [historyActiveTabs, setHistoryActiveTabs] = useState({ '1': 'services', '2': 'services', '3': 'services' });
+
+  const toggleHistoryVisit = (id) => {
+    if (historyExpandedVisits.includes(id)) {
+      setHistoryExpandedVisits(historyExpandedVisits.filter(vid => vid !== id));
+    } else {
+      setHistoryExpandedVisits([...historyExpandedVisits, id]);
+    }
+  };
+
+  const setVisitTab = (id, tab) => {
+    setHistoryActiveTabs({ ...historyActiveTabs, [id]: tab });
+  };
+
+  const historyData = [
+    {
+      id: '1',
+      date: '24/02/2026 13:40',
+      clinic: '120 - Phòng khám Nội 2 | Phòng khám đa khoa Yên Hoà',
+      doctor: 'DƯƠNG MẠNH CƯỜNG',
+      diagnosis: 'J45 - Hen phế quản',
+      services: [
+        {
+          groupName: 'Khám bệnh Trạm y tế xã và đơn vị tương đương',
+          items: [
+            { stt: 1, name: 'Khám bệnh Trạm y tế xã và đơn vị tương đương', date: '24/02/2026', type: 'Giá DV BHYT', qty: 1, doctor: 'Dương Mạnh Cường', status: 'Hoàn thành' }
+          ]
+        },
+        {
+          groupName: 'Nội soi tai mũi họng (1 cơ quan)',
+          items: [
+            { stt: 1, name: 'Nội soi tai mũi họng (1 cơ quan)', date: '24/02/2026', type: 'Giá DV BHYT', qty: 1, doctor: 'Nguyễn Văn Nam', status: 'Hoàn thành' }
+          ]
+        }
+      ],
+      prescription: [
+        { stt: 1, name: 'Hiteen gel 10g', activeIngredient: 'Erythromycine 4%; Tretinoin 0.025%', unit: 'Tuýp', quantity: 1, days: 15, usage: 'Bôi ngày 1 lần vào buổi tối', origin: 'Kho tủ trực Ngoại - Da liễu' },
+        { stt: 2, name: 'Atids 10ml', activeIngredient: 'Acid Salicylic', unit: 'Lọ', quantity: 2, days: 15, usage: 'Bôi ngày 2 lần sáng, tối', origin: 'Nhà thuốc bệnh viện' }
+      ]
+    },
+    {
+      id: '2',
+      date: '18/07/2024 08:08',
+      clinic: '114 - Phòng khám Nội 1- Nhi | Phòng khám đa khoa Yên Hoà',
+      doctor: 'Nguyễn Thị Bình',
+      diagnosis: 'J20 - Viêm phế quản cấp',
+      services: [
+        {
+          groupName: 'Khám bệnh',
+          items: [
+            { stt: 1, name: 'Khám bệnh Nội khoa', date: '18/07/2024', type: 'Giá DV BHYT', qty: 1, doctor: 'Nguyễn Thị Bình', status: 'Hoàn thành' }
+          ]
+        }
+      ],
+      prescription: [
+        { stt: 1, name: 'Amoxicillin 500mg', activeIngredient: 'Amoxicillin', unit: 'Viên', quantity: 21, days: 7, usage: 'Ngày uống 3 lần, mỗi lần 1 viên', origin: 'Nhà thuốc bệnh viện' }
+      ]
+    },
+    {
+      id: '3',
+      date: '16/02/2022 09:34',
+      clinic: '105 - Phòng khám Ngoại - Da liễu | Phòng khám đa khoa Yên Hoà',
+      doctor: 'Trần Văn A',
+      diagnosis: 'I10 - Tăng huyết áp',
+      services: [
+        {
+          groupName: 'Khám bệnh',
+          items: [
+            { stt: 1, name: 'Khám bệnh Ngoại khoa', date: '16/02/2022', type: 'Giá DV BHYT', qty: 1, doctor: 'Trần Văn A', status: 'Hoàn thành' }
+          ]
+        }
+      ],
+      prescription: [
+        { stt: 1, name: 'Amlodipin 5mg', activeIngredient: 'Amlodipin', unit: 'Viên', quantity: 30, days: 30, usage: 'Ngày uống 1 lần vào buổi sáng', origin: 'Nhà thuốc bệnh viện' }
+      ]
+    }
+  ];
 
   const mockData = [
     { stt: 2970, date: '24/03/2026 08:47', intakeId: 'TN.01078.2023.03.24.000081', patientId: '0107822001505', name: 'Phạm Thị Dung', dob: '10/11/1960', yob: 1960, gender: 'Nữ', cmnd: '040350017304', target: 'BHYT-L3', insurance: 'HT3404018115580', service: 'Khám Tai Mũi Họng | Khám Tai Mũi Họng', location: '116 | 116 - Phòng khám Tai mũi họng' },
@@ -74,7 +154,7 @@ const RegistrationList = () => {
     return (
       <div className="animate-fade" style={{ background: '#f8fafc', minHeight: '100vh', padding: '1.5rem 2rem' }}>
         {/* Modals */}
-        <Modal isOpen={showRegPopup} onClose={() => setShowRegPopup(false)} title="Chi tiết các lần đăng ký khám bệnh">
+        <Modal isOpen={showRegPopup} onClose={() => setShowRegPopup(false)} title="Các lần đăng ký khám bệnh">
           {renderFilterRow()}
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
@@ -107,7 +187,7 @@ const RegistrationList = () => {
           </div>
         </Modal>
 
-        <Modal isOpen={showHistoryPopup} onClose={() => setShowHistoryPopup(false)} title="Chi tiết lịch sử khám bệnh">
+        <Modal isOpen={showHistoryPopup} onClose={() => setShowHistoryPopup(false)} title="Lịch sử khám bệnh">
           {renderFilterRow()}
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
@@ -136,14 +216,6 @@ const RegistrationList = () => {
         </Modal>
 
         {/* Breadcrumb Navigation */}
-        {detailMode !== 'overview' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem', fontSize: '0.9rem', color: '#64748b' }}>
-            <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onClick={() => setDetailMode('overview')} onMouseEnter={(e) => e.target.style.color = '#2563eb'} onMouseLeave={(e) => e.target.style.color = '#64748b'}>Chi tiết đăng ký</span>
-            <ChevronRight size={14} />
-            <span style={{ color: '#2563eb', fontWeight: 600 }}>{detailMode === 'payment' ? 'Thanh toán' : 'Khám bệnh'}</span>
-          </div>
-        )}
-
         {/* Detail Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
@@ -157,8 +229,21 @@ const RegistrationList = () => {
               <ChevronRight size={24} style={{ transform: 'rotate(180deg)', color: '#64748b' }} />
             </button>
             <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b', fontSize: '0.8rem', fontWeight: 500, marginBottom: '4px' }}>
+                <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onClick={() => { setViewMode('list'); setDetailMode('overview'); }} onMouseEnter={(e) => e.target.style.color = '#2563eb'} onMouseLeave={(e) => e.target.style.color = '#64748b'}>Danh sách đăng ký</span>
+                <ChevronRight size={14} />
+                {detailMode === 'overview' ? (
+                  <span style={{ color: '#2563eb' }}>Chi tiết đăng ký</span>
+                ) : (
+                  <>
+                    <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onClick={() => setDetailMode('overview')} onMouseEnter={(e) => e.target.style.color = '#2563eb'} onMouseLeave={(e) => e.target.style.color = '#64748b'}>Chi tiết đăng ký</span>
+                    <ChevronRight size={14} />
+                    <span style={{ color: '#2563eb' }}>{detailMode === 'payment' ? 'Thanh toán' : 'Khám bệnh ngoại trú'}</span>
+                  </>
+                )}
+              </div>
               <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.25rem' }}>
-                {detailMode === 'payment' ? 'Thanh toán chi phí' : detailMode === 'examination' ? 'Khám bệnh ngoại trú' : `Chi tiết đăng ký: ${selectedPatient?.name}`}
+                {detailMode === 'payment' ? 'Thanh toán chi phí' : detailMode === 'examination' ? 'Khám bệnh ngoại trú' : `Chi tiết đăng ký`}
               </h1>
             </div>
           </div>
@@ -176,16 +261,26 @@ const RegistrationList = () => {
             )}
 
             {detailMode === 'payment' && (
-              <button className="btn btn-primary" style={{ height: '42px', padding: '0 1.5rem', background: '#10b981' }} onClick={() => setDetailMode('overview')}>
-                <Save size={18} /> Xác nhận thanh toán
+              <button
+                className="btn btn-primary"
+                style={{
+                  height: '42px', padding: '0 1.5rem', borderRadius: '12px',
+                  background: '#10b981', color: '#fff', border: 'none',
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  fontWeight: 600, cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}
+                onClick={() => setDetailMode('overview')}
+              >
+                <CheckCircle size={18} /> Xác nhận
               </button>
             )}
 
-            {detailMode === 'examination' && (
+            {/* {detailMode === 'examination' && (
               <button className="btn btn-primary" style={{ height: '42px', padding: '0 1.5rem', background: '#2563eb' }} onClick={() => setDetailMode('overview')}>
                 <Save size={18} /> Lưu kết quả
               </button>
-            )}
+            )} */}
 
             <div style={{ position: 'relative' }}>
               <button
@@ -207,15 +302,15 @@ const RegistrationList = () => {
                     onMouseEnter={(e) => e.target.style.background = '#f8fafc'}
                     onMouseLeave={(e) => e.target.style.background = 'transparent'}
                   >
-                    <Edit size={16} color="#64748b" /> Chỉnh sửa
+                    <Settings size={16} color="#64748b" /> Chỉnh sửa
                   </button>
                   <button
                     className="dropdown-item"
-                    style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '10px', padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem', color: '#ef4444' }}
-                    onMouseEnter={(e) => e.target.style.background = '#fef2f2'}
+                    style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '10px', padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }}
+                    onMouseEnter={(e) => e.target.style.background = '#fcf2f2'}
                     onMouseLeave={(e) => e.target.style.background = 'transparent'}
                   >
-                    <Trash2 size={16} /> Xóa đăng ký
+                    <Trash2 size={16} color="#ef4444" /> Xóa
                   </button>
                 </div>
               )}
@@ -224,10 +319,16 @@ const RegistrationList = () => {
             <div style={{ width: '1px', height: '24px', background: '#e2e8f0', margin: '0 4px' }}></div>
             <button
               className="btn btn-primary"
-              style={{ height: '42px', padding: '0 1.5rem', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)', background: '#1e293b' }}
+              style={{
+                height: '42px', padding: '0 1.5rem', borderRadius: '12px',
+                background: '#2563eb', color: '#fff', border: 'none',
+                display: 'flex', alignItems: 'center', gap: '8px',
+                fontWeight: 600, cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+              }}
               onClick={() => setViewMode('list')}
             >
-              <Save size={18} /> Lưu (F11)
+              <Save size={18} /> Lưu
             </button>
           </div>
         </div>
@@ -357,8 +458,26 @@ const RegistrationList = () => {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem' }}>
                   <div className="form-field"><label>Số tiếp nhận</label><input type="text" className="modern-input" readOnly defaultValue={selectedPatient?.intakeId} style={{ background: '#f1f5f9' }} /></div>
                   <div className="form-field"><label>STT khám</label><input type="text" className="modern-input" readOnly defaultValue={selectedPatient?.stt} style={{ background: '#f1f5f9', color: '#000' }} /></div>
-                  <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Dịch vụ chỉ định</label><select className="modern-select"><option>{selectedPatient?.service}</option></select></div>
-                  <div className="form-field"><label>Phòng khám</label><select className="modern-select"><option>{selectedPatient?.location}</option></select></div>
+                  <div className="form-field"><label>Ngày vào viện</label><input type="date" className="modern-input" defaultValue="2026-03-24" /></div>
+                  <div className="form-field"><label>Giờ vào viện</label><input type="time" className="modern-input" defaultValue="08:47" /></div>
+                  <div className="form-field"><label>Thời gian y lệnh</label><input type="time" className="modern-input" defaultValue="08:50" /></div>
+
+                  <div className="form-field" style={{ gridColumn: 'span 2' }}>
+                    <label>Dịch vụ chỉ định</label>
+                    <select className="modern-select" style={{ fontWeight: 600, color: '#2563eb' }}>
+                      <option>{selectedPatient?.service}</option>
+                    </select>
+                  </div>
+                  <div className="form-field" style={{ gridColumn: 'span 3' }}>
+                    <label>Phòng khám tiếp nhận</label>
+                    <select className="modern-select">
+                      <option>{selectedPatient?.location}</option>
+                    </select>
+                  </div>
+                  <div className="form-field" style={{ gridColumn: 'span 5' }}>
+                    <label>Ghi chú</label>
+                    <textarea className="modern-input" rows="2" style={{ resize: 'none' }} placeholder="Nhập ghi chú..."></textarea>
+                  </div>
                 </div>
               </div>
             </div>
@@ -394,7 +513,7 @@ const RegistrationList = () => {
 
               <div className="card shadow-sm" style={{ padding: '1rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>Lịch sử khám</h4>
+                  <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>Lịch sử khám bệnh</h4>
                   <Maximize2 size={14} style={{ cursor: 'pointer' }} onClick={() => setShowHistoryPopup(true)} />
                 </div>
                 <div style={{ background: '#f8fafc', padding: '8px 10px', fontSize: '0.7rem', borderRadius: '4px' }}>
@@ -411,56 +530,56 @@ const RegistrationList = () => {
               <div className="card" style={{ padding: '1.25rem' }}>
                 <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '1rem', color: '#2563eb' }}>Thông tin cá nhân</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '0.75rem', fontSize: '0.85rem' }}>
-                   <span>Số tiếp nhận:</span> <strong>{selectedPatient?.intakeId}</strong>
-                   <span>Mã BN:</span> <strong>{selectedPatient?.patientId}</strong>
-                   <span>Họ tên:</span> <strong style={{color: '#1e293b'}}>{selectedPatient?.name?.toUpperCase()}</strong>
-                   <span>Địa chỉ:</span> <span>Số 10, Yên Hòa, Cầu Giấy, Hà Nội</span>
-                   <span>BHYT:</span> <span>{selectedPatient?.insurance}</span>
-                   <span>Đối tượng:</span> <span style={{color: '#2563eb', fontWeight: 600}}>{selectedPatient?.target}</span>
+                  <span>Số tiếp nhận:</span> <strong>{selectedPatient?.intakeId}</strong>
+                  <span>Mã BN:</span> <strong>{selectedPatient?.patientId}</strong>
+                  <span>Họ tên:</span> <strong style={{ color: '#1e293b' }}>{selectedPatient?.name?.toUpperCase()}</strong>
+                  <span>Địa chỉ:</span> <span>Số 10, Yên Hòa, Cầu Giấy, Hà Nội</span>
+                  <span>BHYT:</span> <span>{selectedPatient?.insurance}</span>
+                  <span>Đối tượng:</span> <span style={{ color: '#2563eb', fontWeight: 600 }}>{selectedPatient?.target}</span>
                 </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <div className="card" style={{ padding: '1.25rem' }}>
-                   <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '1rem', color: '#2563eb' }}>Thanh toán</h4>
-                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                      <div className="form-field"><label>Ngày thu</label><input type="date" className="modern-input" defaultValue="2026-03-24" /></div>
-                      <div className="form-field"><label>Hình thức</label><select className="modern-select"><option>Tiền mặt</option><option>Chuyển khoản</option></select></div>
-                   </div>
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '1rem', color: '#2563eb' }}>Thanh toán</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div className="form-field"><label>Ngày thu</label><input type="date" className="modern-input" defaultValue="2026-03-24" /></div>
+                    <div className="form-field"><label>Hình thức</label><select className="modern-select"><option>Tiền mặt</option><option>Chuyển khoản</option></select></div>
+                  </div>
                 </div>
                 <div className="card" style={{ padding: '1.25rem' }}>
-                   <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '1rem', color: '#2563eb' }}>Chứng từ</h4>
-                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                      <div className="form-field"><label>Số quyển</label><input type="text" className="modern-input" placeholder="Q001" /></div>
-                      <div className="form-field"><label>Số biên lai</label><input type="text" className="modern-input" placeholder="000123" /></div>
-                   </div>
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '1rem', color: '#2563eb' }}>Chứng từ</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div className="form-field"><label>Số quyển</label><input type="text" className="modern-input" placeholder="Q001" /></div>
+                    <div className="form-field"><label>Số biên lai</label><input type="text" className="modern-input" placeholder="000123" /></div>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="card" style={{ marginTop: '1.5rem', padding: 0 }}>
-               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
-                 <thead style={{ background: '#f8fafc' }}>
-                   <tr>
-                     <th style={{ padding: '12px' }}>STT</th>
-                     <th style={{ padding: '12px', textAlign: 'left' }}>Dịch vụ</th>
-                     <th style={{ padding: '12px' }}>SL</th>
-                     <th style={{ padding: '12px', textAlign: 'right' }}>Đơn giá</th>
-                     <th style={{ padding: '12px', textAlign: 'right' }}>Thành tiền</th>
-                     <th style={{ padding: '12px', textAlign: 'right' }}>BHYT</th>
-                     <th style={{ padding: '12px', textAlign: 'right' }}>BN Trả</th>
-                   </tr>
-                 </thead>
-                 <tbody>
-                   <tr style={{ borderTop: '1px solid #f1f5f9' }}>
-                     <td style={{ padding: '12px', textAlign: 'center' }}>1</td>
-                     <td style={{ padding: '12px' }}>{selectedPatient?.service}</td>
-                     <td style={{ padding: '12px', textAlign: 'center' }}>1</td>
-                     <td style={{ padding: '12px', textAlign: 'right' }}>36.500</td>
-                     <td style={{ padding: '12px', textAlign: 'right' }}>36.500</td>
-                     <td style={{ padding: '12px', textAlign: 'right' }}>36.500</td>
-                     <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, color: '#ef4444' }}>0</td>
-                   </tr>
-                 </tbody>
-               </table>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
+                <thead style={{ background: '#f8fafc' }}>
+                  <tr>
+                    <th style={{ padding: '12px' }}>STT</th>
+                    <th style={{ padding: '12px', textAlign: 'left' }}>Dịch vụ</th>
+                    <th style={{ padding: '12px' }}>SL</th>
+                    <th style={{ padding: '12px', textAlign: 'right' }}>Đơn giá</th>
+                    <th style={{ padding: '12px', textAlign: 'right' }}>Thành tiền</th>
+                    <th style={{ padding: '12px', textAlign: 'right' }}>BHYT</th>
+                    <th style={{ padding: '12px', textAlign: 'right' }}>BN Trả</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderTop: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '12px', textAlign: 'center' }}>1</td>
+                    <td style={{ padding: '12px' }}>{selectedPatient?.service}</td>
+                    <td style={{ padding: '12px', textAlign: 'center' }}>1</td>
+                    <td style={{ padding: '12px', textAlign: 'right' }}>36.500</td>
+                    <td style={{ padding: '12px', textAlign: 'right' }}>36.500</td>
+                    <td style={{ padding: '12px', textAlign: 'right' }}>36.500</td>
+                    <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, color: '#ef4444' }}>0</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         ) : (
@@ -630,14 +749,47 @@ const RegistrationList = () => {
                 </div>
 
                 {/* Prescription Section */}
-                <div className="card" style={{ padding: '1.5rem', border: 'none', background: '#fff' }}>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb', marginBottom: '1.5rem' }}>Kê đơn thuốc</h3>
-                  <div style={{ padding: '2.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', background: '#f8fafc', borderRadius: '12px' }}>
-                    <div style={{ width: '50px', height: '50px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-                      <Pill size={24} color="#94a3b8" />
+                <div className="card" style={{ padding: '0', border: 'none', background: '#fff' }}>
+                  <div style={{ padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9' }}>
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb', margin: 0 }}>Kê đơn thuốc</h3>
+                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                      <button className="btn btn-outline" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', background: '#fff' }}><Printer size={16} /> In phiếu</button>
+                      <button className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Plus size={16} /> Thêm thuốc</button>
                     </div>
-                    <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Chưa có đơn thuốc nào được kê cho bệnh nhân này.</p>
-                    <button className="btn btn-primary" style={{ padding: '0.6rem 1.5rem' }}><Plus size={16} /> Bắt đầu kê đơn</button>
+                  </div>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+                      <thead>
+                        <tr style={{ background: '#f8fafc', color: '#475569', textAlign: 'left' }}>
+                          <th style={{ padding: '12px 1rem', fontWeight: 600, borderBottom: '2px solid #e2e8f0', width: '50px', textAlign: 'center' }}>STT</th>
+                          <th style={{ padding: '12px 1rem', fontWeight: 600, borderBottom: '2px solid #e2e8f0' }}>Tên dược</th>
+                          <th style={{ padding: '12px 1rem', fontWeight: 600, borderBottom: '2px solid #e2e8f0' }}>Hoạt chất</th>
+                          <th style={{ padding: '12px 1rem', fontWeight: 600, borderBottom: '2px solid #e2e8f0' }}>Đơn vị tính</th>
+                          <th style={{ padding: '12px 1rem', fontWeight: 600, borderBottom: '2px solid #e2e8f0', textAlign: 'center' }}>Số lượng</th>
+                          <th style={{ padding: '12px 1rem', fontWeight: 600, borderBottom: '2px solid #e2e8f0', textAlign: 'center' }}>Số ngày</th>
+                          <th style={{ padding: '12px 1rem', fontWeight: 600, borderBottom: '2px solid #e2e8f0' }}>Cách dùng</th>
+                          <th style={{ padding: '12px 1rem', fontWeight: 600, borderBottom: '2px solid #e2e8f0' }}>Nơi mua thuốc</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          { stt: 1, name: 'Hiteen gel 10g', activeIngredient: 'Erythromycine 4%; Tretinoin 0.025%', unit: 'Tuýp', quantity: 1, days: 15, usage: 'Bôi ngày 1 lần vào buổi tối', origin: 'Kho tủ trực Ngoại - Da liễu' },
+                          { stt: 2, name: 'Atids 10ml', activeIngredient: 'Acid Salicylic', unit: 'Lọ', quantity: 2, days: 15, usage: 'Bôi ngày 2 lần sáng, tối', origin: 'Nhà thuốc bệnh viện' },
+                          { stt: 3, name: 'Vitamin C 500mg', activeIngredient: 'Acid Ascorbic', unit: 'Viên', quantity: 30, days: 15, usage: 'Uống sáng 1 viên, chiều 1 viên', origin: 'Nhà thuốc bệnh viện' }
+                        ].map((item, idx) => (
+                          <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                            <td style={{ padding: '1rem', textAlign: 'center', color: '#64748b' }}>{item.stt}</td>
+                            <td style={{ padding: '1rem', fontWeight: 600, color: '#0f172a' }}>{item.name}</td>
+                            <td style={{ padding: '1rem', color: '#475569' }}>{item.activeIngredient}</td>
+                            <td style={{ padding: '1rem', color: '#475569' }}>{item.unit}</td>
+                            <td style={{ padding: '1rem', textAlign: 'center', fontWeight: 600 }}>{item.quantity}</td>
+                            <td style={{ padding: '1rem', textAlign: 'center' }}>{item.days}</td>
+                            <td style={{ padding: '1rem', color: '#475569' }}>{item.usage}</td>
+                            <td style={{ padding: '1rem', color: '#64748b' }}>{item.origin}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -657,11 +809,11 @@ const RegistrationList = () => {
                       { date: '16/02/2022 09:34', clinic: '114 - Nội 1', diag: 'I10 - Tăng huyết áp' }
                     ].map((item, i) => (
                       <div key={i} style={{ position: 'relative', paddingLeft: '20px', borderLeft: '2px solid #e2e8f0' }}>
-                        <div style={{ 
-                          position: 'absolute', left: '-7px', top: '0', 
-                          width: '12px', height: '12px', borderRadius: '50%', 
-                          background: i === 0 ? '#2563eb' : '#fff', 
-                          border: '2px solid #2563eb' 
+                        <div style={{
+                          position: 'absolute', left: '-7px', top: '0',
+                          width: '12px', height: '12px', borderRadius: '50%',
+                          background: i === 0 ? '#2563eb' : '#fff',
+                          border: '2px solid #2563eb'
                         }}></div>
                         <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563eb', marginBottom: '4px' }}>{item.date}</div>
                         <div style={{ background: '#f8fafc', padding: '10px', borderRadius: '8px', fontSize: '0.8rem' }}>
@@ -671,10 +823,212 @@ const RegistrationList = () => {
                       </div>
                     ))}
                   </div>
-                  <button className="btn btn-outline" style={{ width: '100%', marginTop: '1.5rem', fontSize: '0.85rem' }}>
+                  <button
+                    className="btn btn-outline"
+                    style={{ width: '100%', marginTop: '1.5rem', fontSize: '0.85rem' }}
+                    onClick={() => setShowFullHistoryModal(true)}
+                  >
                     <Eye size={16} /> Xem tất cả lịch sử
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* History Detail Popup */}
+        {showFullHistoryModal && (
+          <div style={{ position: 'fixed', inset: 0, zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(15, 23, 42, 0.7)', backdropFilter: 'blur(8px)', padding: '24px' }}>
+            <div className="card shadow-2xl animate-fade" style={{ width: '1300px', maxWidth: '95vw', background: '#fff', borderRadius: '20px', overflow: 'hidden', height: '90vh', display: 'flex', flexDirection: 'column', border: 'none' }}>
+
+              {/* Header */}
+              <div style={{ padding: '1.25rem 2rem', background: '#fff', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ width: '40px', height: '40px', background: '#eff6ff', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <History size={20} color="#2563eb" />
+                  </div>
+                  <div>
+                    <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: '#1e293b' }}>Lịch sử khám chữa bệnh</h2>
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>Bệnh nhân: <span style={{ fontWeight: 600, color: '#334155' }}>Lê Thị Loan</span> • Mã BN: <span style={{ fontWeight: 600, color: '#334155' }}>0107822000811</span></p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowFullHistoryModal(false)}
+                  style={{ width: '36px', height: '36px', background: '#f8fafc', border: 'none', borderRadius: '10px', color: '#64748b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: '0.2s' }}
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+
+              <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+                {/* Left Sidebar: Visits List */}
+                <div style={{ width: '320px', borderRight: '1px solid #f1f5f9', background: '#fcfdfe', overflowY: 'auto', padding: '1.25rem' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.05em' }}>Danh sách đợt khám ({historyData.length})</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {historyData.map((visit) => (
+                      <div
+                        key={visit.id}
+                        onClick={() => setSelectedHistoryVisitId(visit.id)}
+                        style={{
+                          padding: '1rem', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.2s',
+                          background: selectedHistoryVisitId === visit.id ? '#fff' : 'transparent',
+                          border: '1px solid',
+                          borderColor: selectedHistoryVisitId === visit.id ? '#2563eb' : 'transparent',
+                          boxShadow: selectedHistoryVisitId === visit.id ? '0 4px 12px rgba(37, 99, 235, 0.08)' : 'none'
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: selectedHistoryVisitId === visit.id ? '#2563eb' : '#1e293b' }}>{visit.date.split(' ')[0]}</span>
+                          <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{visit.date.split(' ')[1]}</span>
+                        </div>
+                        <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '4px', fontWeight: 500 }}>{visit.clinic.split('|')[0]}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: 600 }}>{visit.diagnosis}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Main Content Area */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#fff', overflow: 'hidden' }}>
+                  {selectedHistoryVisitId ? (
+                    <>
+                      {/* Visit Header Detail */}
+                      {historyData.filter(v => v.id === selectedHistoryVisitId).map(visit => (
+                        <React.Fragment key={visit.id}>
+                          <div style={{ padding: '1.5rem 2rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '1.25rem' }}>
+                              <div>
+                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '4px' }}>Phòng khám & Bác sĩ</div>
+                                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1e293b', marginBottom: '4px' }}>{visit.clinic}</div>
+                                <div style={{ fontSize: '0.85rem', color: '#2563eb', fontWeight: 600 }}>BS: {visit.doctor}</div>
+                              </div>
+                              <div>
+                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '4px' }}>Chẩn đoán đợt khám</div>
+                                <div style={{ fontSize: '1rem', fontWeight: 700, color: '#ef4444' }}>{visit.diagnosis}</div>
+                              </div>
+                            </div>
+
+                            {/* Tabs Navigation */}
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                              <button
+                                onClick={() => setVisitTab(visit.id, 'services')}
+                                style={{
+                                  padding: '8px 20px', borderRadius: '10px', border: 'none', fontSize: '0.85rem', fontWeight: 600,
+                                  cursor: 'pointer', transition: 'all 0.2s',
+                                  background: (historyActiveTabs[visit.id] || 'services') === 'services' ? '#2563eb' : 'transparent',
+                                  color: (historyActiveTabs[visit.id] || 'services') === 'services' ? '#fff' : '#64748b'
+                                }}
+                              >
+                                Dịch vụ ({visit.services.reduce((acc, g) => acc + g.items.length, 0)})
+                              </button>
+                              <button
+                                onClick={() => setVisitTab(visit.id, 'prescription')}
+                                style={{
+                                  padding: '8px 20px', borderRadius: '10px', border: 'none', fontSize: '0.85rem', fontWeight: 600,
+                                  cursor: 'pointer', transition: 'all 0.2s',
+                                  background: historyActiveTabs[visit.id] === 'prescription' ? '#2563eb' : 'transparent',
+                                  color: historyActiveTabs[visit.id] === 'prescription' ? '#fff' : '#64748b'
+                                }}
+                              >
+                                Đơn thuốc ({visit.prescription.length})
+                              </button>
+                            </div>
+                          </div>
+
+                          <div style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
+                            {(historyActiveTabs[visit.id] || 'services') === 'services' ? (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                {visit.services.map((group, gIdx) => (
+                                  <div key={gIdx}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                                      <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 700, color: '#1e293b' }}>{group.groupName}</h4>
+                                      <div style={{ flex: 1, height: '1px', background: '#f1f5f9' }}></div>
+                                      <span style={{ fontSize: '0.75rem', background: '#eff6ff', color: '#2563eb', padding: '2px 8px', borderRadius: '6px', fontWeight: 600 }}>{group.items.length} dịch vụ</span>
+                                    </div>
+                                    <div className="card" style={{ padding: 0, border: '1px solid #f1f5f9', overflow: 'hidden' }}>
+                                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+                                        <thead>
+                                          <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
+                                            <th style={{ padding: '12px', textAlign: 'center', width: '50px', color: '#64748b' }}>STT</th>
+                                            <th style={{ padding: '12px', textAlign: 'left', color: '#64748b' }}>Tên dịch vụ</th>
+                                            <th style={{ padding: '12px', textAlign: 'center', color: '#64748b' }}>Loại giá</th>
+                                            <th style={{ padding: '12px', textAlign: 'center', width: '60px', color: '#64748b' }}>SL</th>
+                                            <th style={{ padding: '12px', textAlign: 'center', color: '#64748b' }}>Bác sĩ</th>
+                                            <th style={{ padding: '12px', textAlign: 'center', color: '#64748b' }}>Trạng thái</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {group.items.map((item, iIdx) => (
+                                            <tr key={iIdx} style={{ borderBottom: iIdx === group.items.length - 1 ? 'none' : '1px solid #f8fafc' }}>
+                                              <td style={{ padding: '12px', textAlign: 'center', color: '#94a3b8' }}>{item.stt}</td>
+                                              <td style={{ padding: '12px', fontWeight: 600, color: '#334155' }}>{item.name}</td>
+                                              <td style={{ padding: '12px', textAlign: 'center', color: '#64748b' }}>{item.type}</td>
+                                              <td style={{ padding: '12px', textAlign: 'center', fontWeight: 700 }}>{item.qty}</td>
+                                              <td style={{ padding: '12px', textAlign: 'center', color: '#64748b' }}>{item.doctor}</td>
+                                              <td style={{ padding: '12px', textAlign: 'center' }}>
+                                                <span style={{ background: '#dcfce7', color: '#166534', padding: '3px 10px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: 600 }}>{item.status}</span>
+                                              </td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="card" style={{ padding: 0, border: '1px solid #f1f5f9', overflow: 'hidden' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+                                  <thead>
+                                    <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
+                                      <th style={{ padding: '14px 1rem', textAlign: 'center', color: '#64748b', width: '50px' }}>STT</th>
+                                      <th style={{ padding: '14px 1rem', textAlign: 'left', color: '#64748b' }}>Tên thuốc</th>
+                                      <th style={{ padding: '14px 1rem', textAlign: 'left', color: '#64748b' }}>Hàm lượng / Hoạt chất</th>
+                                      <th style={{ padding: '14px 1rem', textAlign: 'center', color: '#64748b' }}>SL</th>
+                                      <th style={{ padding: '14px 1rem', textAlign: 'center', color: '#64748b', width: '80px' }}>Ngày</th>
+                                      <th style={{ padding: '14px 1rem', textAlign: 'left', color: '#64748b' }}>Cách dùng</th>
+                                      <th style={{ padding: '14px 1rem', textAlign: 'left', color: '#64748b' }}>Nơi mua</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {visit.prescription.map((item, pIdx) => (
+                                      <tr key={pIdx} style={{ borderBottom: pIdx === visit.prescription.length - 1 ? 'none' : '1px solid #f8fafc' }}>
+                                        <td style={{ padding: '1rem', textAlign: 'center', color: '#94a3b8' }}>{item.stt}</td>
+                                        <td>
+                                          <div style={{ padding: '1rem', fontWeight: 700, color: '#1e293b' }}>{item.name}</div>
+                                        </td>
+                                        <td style={{ padding: '1rem', color: '#64748b', maxWidth: '200px' }}>{item.activeIngredient}</td>
+                                        <td style={{ padding: '1rem', textAlign: 'center', fontWeight: 700, color: '#2563eb' }}>{item.quantity} {item.unit}</td>
+                                        <td style={{ padding: '1rem', textAlign: 'center', fontWeight: 600 }}>{item.days}</td>
+                                        <td style={{ padding: '1rem', color: '#475569', fontSize: '0.8rem', lineHeight: '1.4' }}>{item.usage}</td>
+                                        <td style={{ padding: '1rem', color: '#94a3b8', fontSize: '0.75rem' }}>{item.origin}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            )}
+                          </div>
+                        </React.Fragment>
+                      ))}
+                    </>
+                  ) : (
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}>
+                      <History size={48} style={{ marginBottom: '1rem', opacity: 0.2 }} />
+                      <p>Chọn một đợt khám từ danh sách bên trái để xem chi tiết</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div style={{ padding: '1.25rem 2rem', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'flex-end', background: '#fff' }}>
+                <button
+                  className="btn btn-primary"
+                  style={{ height: '42px', padding: '0 2rem', borderRadius: '12px', background: '#1e293b' }}
+                  onClick={() => setShowFullHistoryModal(false)}
+                >
+                  Đóng lịch sử
+                </button>
               </div>
             </div>
           </div>
@@ -713,7 +1067,18 @@ const RegistrationList = () => {
             <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#64748b', marginBottom: '6px', display: 'block' }}>Đến ngày</label>
             <input type="date" className="modern-input" defaultValue="2026-03-24" style={{ width: '100%' }} />
           </div>
-          <button className="btn btn-primary" style={{ background: '#1e293b', height: '42px', padding: '0 1.5rem' }}>Tìm kiếm</button>
+          <button
+            className="btn btn-primary"
+            style={{
+              background: '#2563eb', height: '42px', padding: '0 1.5rem',
+              borderRadius: '12px', color: '#fff', border: 'none',
+              display: 'flex', alignItems: 'center', gap: '8px',
+              fontWeight: 600, cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)'
+            }}
+          >
+            <Search size={18} /> Tìm kiếm
+          </button>
           <button className="btn btn-outline" style={{ height: '42px', borderColor: '#10b981', color: '#10b981', background: '#fff' }}>
             <FileSpreadsheet size={16} style={{ marginRight: '8px' }} /> Xuất Excel
           </button>
@@ -751,8 +1116,8 @@ const RegistrationList = () => {
                 >
                   <td style={{ padding: '0.75rem 1rem', textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
                     <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center' }}>
-                      <button className="action-circle-btn" style={{borderColor: '#2563eb', color: '#2563eb'}} onClick={(e) => { e.stopPropagation(); setSelectedPatient(row); setDetailMode('examination'); setViewMode('details'); }} title="Khám bệnh"><Stethoscope size={12} /></button>
-                      <button className="action-circle-btn" style={{borderColor: '#10b981', color: '#10b981'}} onClick={(e) => { e.stopPropagation(); setSelectedPatient(row); setDetailMode('payment'); setViewMode('details'); }} title="Thanh toán"><CircleDollarSign size={12} /></button>
+                      <button className="action-circle-btn" style={{ borderColor: '#2563eb', color: '#2563eb' }} onClick={(e) => { e.stopPropagation(); setSelectedPatient(row); setDetailMode('examination'); setViewMode('details'); }} title="Khám bệnh"><Stethoscope size={12} /></button>
+                      <button className="action-circle-btn" style={{ borderColor: '#10b981', color: '#10b981' }} onClick={(e) => { e.stopPropagation(); setSelectedPatient(row); setDetailMode('payment'); setViewMode('details'); }} title="Thanh toán"><CircleDollarSign size={12} /></button>
                       <div style={{ position: 'relative' }}>
                         <button className="action-circle-btn" onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === idx ? -1 : idx); }} title="Thao tác khác"><MoreHorizontal size={11} /></button>
                         {openDropdown === idx && (

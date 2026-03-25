@@ -103,7 +103,7 @@ const Reception = () => {
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button className="btn btn-outline" style={{ background: '#fff' }}><RotateCcw size={18} /> Làm mới (F5)</button>
-          <button className="btn btn-primary" style={{ padding: '0.75rem 1.5rem', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}><Save size={18} /> Lưu & Tiếp đón (F11)</button>
+          <button className="btn btn-primary" style={{ padding: '0.75rem 1.5rem', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}><Save size={18} /> Lưu & Tiếp đón</button>
         </div>
       </div>
 
