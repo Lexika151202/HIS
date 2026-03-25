@@ -229,24 +229,25 @@ const Examination = () => {
                     <textarea className="modern-input" rows="2" defaultValue="Bệnh nhân đau nhức vùng thắt lưng vài ngày nay. Khám bệnh nhân tỉnh, đau nhức nhiều, vận động đau tăng"></textarea>
                   </div>
 
-                  {/* Clinical Indicators */}
                   <div className="form-field"><label>Loại tai nạn</label><select className="modern-select"><option>-- Chọn loại tai nạn --</option></select></div>
                   <div className="form-field"><label>Kết quả khám</label><select className="modern-select"><option>Không thay đổi</option><option>Khỏi</option><option>Đỡ/Giảm</option></select></div>
                   <div className="form-field"><label>Loại khám chữa bệnh</label><select className="modern-select"><option>Khám bệnh</option></select></div>
                   <div className="form-field"><label>Bác sĩ khám</label><select className="modern-select"><option>106 | Cao Thu Hằng</option></select></div>
 
-                  <div style={{ gridColumn: 'span 4', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-                    <div className="form-field">
-                      <label>Kết thúc khám</label>
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        <input type="date" className="modern-input" defaultValue="2026-03-23" style={{ flex: 1 }} />
-                        <input type="time" className="modern-input" defaultValue="08:09" style={{ width: '120px' }} />
-                      </div>
+                  <div className="form-field">
+                    <label>Kết thúc khám</label>
+                    <div style={{ display: 'flex', gap: '4px' }}>
+                      <input type="date" className="modern-input" defaultValue="2026-03-23" style={{ flex: 1.2, minWidth: '0' }} />
+                      <input type="time" className="modern-input" defaultValue="08:09" style={{ flex: 0.8, minWidth: '0' }} />
                     </div>
-                    <div className="form-field">
-                      <label>Ghi chú kết luận</label>
-                      <input type="text" className="modern-input" placeholder="Nhập ghi chú cuối cùng..." />
-                    </div>
+                  </div>
+                  <div className="form-field">
+                    <label>Phương pháp khám bệnh</label>
+                    <select className="modern-select"><option>Tây y</option><option>Đông y</option><option>Kết hợp</option></select>
+                  </div>
+                  <div className="form-field" style={{ gridColumn: 'span 2' }}>
+                    <label>Ghi chú kết luận</label>
+                    <input type="text" className="modern-input" placeholder="Nhập ghi chú cuối cùng..." />
                   </div>
                 </div>
               </div>

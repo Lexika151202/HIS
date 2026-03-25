@@ -478,56 +478,171 @@ const RegistrationList = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.5rem', alignItems: 'start' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {/* Main Clinical Info */}
                 <div className="card" style={{ padding: '1.5rem', border: 'none' }}>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                     <Stethoscope size={20} color="#2563eb" />
-                     <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>Thông tin khám bệnh</h3>
-                     <div style={{ flex: 1, height: '1px', background: '#f1f5f9' }}></div>
-                   </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                    <Stethoscope size={20} color="#2563eb" />
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>Thông tin khám bệnh</h3>
+                    <div style={{ flex: 1, height: '1px', background: '#f1f5f9' }}></div>
+                  </div>
 
-                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
-                     <div className="form-field"><label>Ngày vào khám</label><input type="date" className="modern-input" defaultValue="2026-03-24" /></div>
-                     <div className="form-field"><label>Giờ vào viện</label><input type="time" className="modern-input" defaultValue="08:50" /></div>
-                     <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Phòng khám</label><select className="modern-select"><option>{selectedPatient?.location}</option></select></div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+                    <div className="form-field"><label>Ngày vào khám</label><input type="date" className="modern-input" defaultValue="2026-03-24" /></div>
+                    <div className="form-field"><label>Giờ vào viện</label><input type="time" className="modern-input" defaultValue="08:50" /></div>
+                    <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Phòng khám</label><select className="modern-select"><option>{selectedPatient?.location}</option></select></div>
 
-                     <div className="form-field" style={{ gridColumn: 'span 2' }}>
-                       <label>Triệu chứng / Diễn biến</label>
-                       <textarea className="modern-input" rows="3" placeholder="Ghi chú triệu chứng..."></textarea>
-                     </div>
-                     <div className="form-field" style={{ gridColumn: 'span 2' }}>
-                       <label>Lý do vào viện</label>
-                       <textarea className="modern-input" rows="3" placeholder="Ghi chú lý do..."></textarea>
-                     </div>
+                    <div className="form-field" style={{ gridColumn: 'span 2' }}>
+                      <label>Triệu chứng / Diễn biến</label>
+                      <textarea className="modern-input" rows="3" placeholder="Ghi chú triệu chứng..."></textarea>
+                    </div>
+                    <div className="form-field" style={{ gridColumn: 'span 2' }}>
+                      <label>Lý do vào viện</label>
+                      <textarea className="modern-input" rows="3" placeholder="Ghi chú lý do..."></textarea>
+                    </div>
 
-                     <div className="form-field" style={{ gridColumn: 'span 1' }}>
-                       <label>Bệnh chính (ICD10)</label>
-                       <select className="modern-select"><option>J02 - Viêm họng cấp</option></select>
-                     </div>
-                     <div className="form-field" style={{ gridColumn: 'span 3' }}>
-                       <label>Diễn giải bệnh chính</label>
-                       <input type="text" className="modern-input" placeholder="Nhập diễn giải..." />
-                     </div>
-                   </div>
+                    <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                      <label>Bệnh chính (ICD10)</label>
+                      <select className="modern-select"><option>M54 - Đau lưng (Dorsalgia)</option></select>
+                    </div>
+                    <div className="form-field" style={{ gridColumn: 'span 3' }}>
+                      <label>Diễn giải bệnh chính</label>
+                      <input type="text" className="modern-input" placeholder="Nhập diễn giải..." />
+                    </div>
+
+                    <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                      <label>Bệnh kèm theo</label>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', padding: '6px', border: '1px solid #e2e8f0', borderRadius: '10px', minHeight: '44px', background: '#fff' }}>
+                        <span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: '6px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>M47 - Thoái hoá <X size={12} cursor="pointer" /></span>
+                        <input type="text" placeholder="Tìm..." style={{ border: 'none', outline: 'none', fontSize: '0.85rem', flex: 1, minWidth: '40px' }} />
+                      </div>
+                    </div>
+                    <div className="form-field" style={{ gridColumn: 'span 3' }}>
+                      <label>Diễn giải bệnh kèm theo</label>
+                      <input type="text" className="modern-input" placeholder="Nhập diễn giải..." />
+                    </div>
+
+                    <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Tư vấn điều trị</label><textarea className="modern-input" rows="2"></textarea></div>
+                    <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Diễn biến điều trị</label><textarea className="modern-input" rows="2"></textarea></div>
+
+                    <div className="form-field"><label>Loại tai nạn</label><select className="modern-select"><option>-- Chọn loại tai nạn --</option></select></div>
+                    <div className="form-field"><label>Kết quả khám</label><select className="modern-select"><option>Không thay đổi</option><option>Khỏi</option><option>Đỡ/Giảm</option></select></div>
+                    <div className="form-field"><label>Loại khám chữa bệnh</label><select className="modern-select"><option>Khám bệnh</option></select></div>
+                    <div className="form-field"><label>Bác sĩ khám</label><select className="modern-select"><option>Cao Thu Hằng</option></select></div>
+
+                    <div className="form-field">
+                      <label>Kết thúc khám</label>
+                      <div style={{ display: 'flex', gap: '4px' }}>
+                        <input type="date" className="modern-input" defaultValue="2026-03-24" style={{ flex: 1.2, minWidth: '0' }} />
+                        <input type="time" className="modern-input" defaultValue="22:37" style={{ flex: 0.8, minWidth: '0' }} />
+                      </div>
+                    </div>
+                    <div className="form-field">
+                      <label>Phương pháp khám bệnh</label>
+                      <select className="modern-select"><option>Tây y</option><option>Đông y</option><option>Kết hợp</option></select>
+                    </div>
+                    <div className="form-field" style={{ gridColumn: 'span 2' }}>
+                      <label>Ghi chú kết luận</label>
+                      <input type="text" className="modern-input" placeholder="Ghi chú kết luận..." />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Vital Signs */}
                 <div className="card" style={{ padding: '1.5rem', border: 'none' }}>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                     <Activity size={20} color="#ef4444" />
-                     <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>Chỉ số sinh tồn</h3>
-                   </div>
-                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '1rem' }}>
-                      {['Mạch', 'Nhiệt độ', 'HA (min)', 'HA (max)', 'Nhịp thở', 'Cân nặng'].map((l, i) => (
-                        <div key={i} style={{ padding: '1rem 0.5rem', background: '#f8fafc', borderRadius: '12px', textAlign: 'center' }}>
-                          <label style={{ fontSize: '0.7rem', color: '#64748b', display: 'block', marginBottom: '6px' }}>{l}</label>
-                          <input type="text" style={{ width: '100%', border: 'none', background: 'transparent', textAlign: 'center', fontWeight: 700 }} placeholder="..." />
-                        </div>
-                      ))}
-                   </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                    <Activity size={20} color="#ef4444" />
+                    <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>Chỉ số sinh tồn</h3>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '1rem' }}>
+                    {['Mạch', 'Nhiệt độ', 'HA (min)', 'HA (max)', 'Nhịp thở', 'Cân nặng'].map((l, i) => (
+                      <div key={i} style={{ padding: '1rem 0.5rem', background: '#f8fafc', borderRadius: '12px', textAlign: 'center' }}>
+                        <label style={{ fontSize: '0.7rem', color: '#64748b', display: 'block', marginBottom: '6px' }}>{l}</label>
+                        <input type="text" style={{ width: '100%', border: 'none', background: 'transparent', textAlign: 'center', fontWeight: 700 }} placeholder="..." />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Service Orders Table */}
+                <div className="card" style={{ padding: '0', border: 'none', overflow: 'hidden' }}>
+                  <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff' }}>
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb' }}>Chỉ định dịch vụ</h3>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button className="btn btn-outline btn-sm"><Printer size={16} /> In phiếu</button>
+                      <button className="btn btn-primary btn-sm"><Plus size={16} /> Thêm chỉ định</button>
+                    </div>
+                  </div>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.75rem' }}>
+                      <thead style={{ background: '#f8fafc', color: '#64748b' }}>
+                        <tr>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'center', width: '40px' }}>STT</th>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'left' }}>Tên dịch vụ</th>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>Ngày yêu cầu</th>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>Loại giá</th>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>SL</th>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'right' }}>Đơn giá (VNĐ)</th>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'right' }}>Thành tiền</th>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'right' }}>BHYT (VNĐ)</th>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'right' }}>BN (VNĐ)</th>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'left' }}>Bác sĩ chỉ định</th>
+                          <th style={{ padding: '0.75rem 0.5rem', textAlign: 'left', width: '100px' }}>Trạng thái</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* Group Header */}
+                        <tr style={{ background: '#f1f5f9', fontWeight: 600 }}>
+                          <td colSpan="11" style={{ padding: '0.5rem 1rem', color: '#2563eb' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '4px', width: '16px', height: '16px', justifyContent: 'center', fontSize: '14px' }}>-</span>
+                              109 | 109 - Phòng khám Đông y
+                            </div>
+                          </td>
+                        </tr>
+                        {/* Data Row */}
+                        <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                          <td style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>1</td>
+                          <td style={{ padding: '0.75rem 0.5rem', fontWeight: 600 }}>Khám Y học cổ truyền</td>
+                          <td style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>
+                            23/03/2026<br /><small style={{ color: '#64748b' }}>07:54</small>
+                          </td>
+                          <td style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>Giá DV BHYT</td>
+                          <td style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>1</td>
+                          <td style={{ padding: '0.75rem 0.5rem', textAlign: 'right' }}>36.500</td>
+                          <td style={{ padding: '0.75rem 0.5rem', textAlign: 'right', fontWeight: 600 }}>36.500</td>
+                          <td style={{ padding: '0.75rem 0.5rem', textAlign: 'right', color: '#10b981' }}>36.500</td>
+                          <td style={{ padding: '0.75rem 0.5rem', textAlign: 'right' }}>0</td>
+                          <td style={{ padding: '0.75rem 0.5rem' }}>Cao Thu Hằng</td>
+                          <td style={{ padding: '0.75rem 0.5rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', fontSize: '0.7rem' }}>
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
+                                <input type="checkbox" checked readOnly style={{ width: '12px', height: '12px' }} /> Kết quả
+                              </label>
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
+                                <input type="checkbox" style={{ width: '12px', height: '12px' }} /> Viện phí
+                              </label>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Prescription Section */}
+                <div className="card" style={{ padding: '1.5rem', border: 'none', background: '#fff' }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb', marginBottom: '1.5rem' }}>Kê đơn thuốc</h3>
+                  <div style={{ padding: '2.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', background: '#f8fafc', borderRadius: '12px' }}>
+                    <div style={{ width: '50px', height: '50px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                      <Pill size={24} color="#94a3b8" />
+                    </div>
+                    <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Chưa có đơn thuốc nào được kê cho bệnh nhân này.</p>
+                    <button className="btn btn-primary" style={{ padding: '0.6rem 1.5rem' }}><Plus size={16} /> Bắt đầu kê đơn</button>
+                  </div>
                 </div>
               </div>
 
-              {/* Modern Right History Bar */}
+              {/* Sidebar: Clinical History Only */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 <div className="card" style={{ padding: '1.5rem', border: 'none', background: '#fff' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
@@ -535,10 +650,11 @@ const RegistrationList = () => {
                     <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>Lịch sử khám bệnh</h3>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                     {[
-                      { date: '23/03/2026 07:54', clinic: '109 - Đông y', doctor: 'Cao Thu Hằng', diag: 'M54 - Đau lưng' },
-                      { date: '18/07/2024 08:08', clinic: '114 - Nội 1', doctor: 'Nguyễn Bình', diag: 'J20 - Viêm phế quản' },
+                      { date: '23/03/2026 07:54', clinic: '109 - Đông y', diag: 'M54 - Đau lưng' },
+                      { date: '18/07/2024 08:08', clinic: '114 - Nội 1', diag: 'J20 - Viêm phế quản' },
+                      { date: '16/02/2022 09:34', clinic: '114 - Nội 1', diag: 'I10 - Tăng huyết áp' }
                     ].map((item, i) => (
                       <div key={i} style={{ position: 'relative', paddingLeft: '20px', borderLeft: '2px solid #e2e8f0' }}>
                         <div style={{ 
@@ -547,16 +663,16 @@ const RegistrationList = () => {
                           background: i === 0 ? '#2563eb' : '#fff', 
                           border: '2px solid #2563eb' 
                         }}></div>
-                        <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#2563eb', marginBottom: '4px' }}>{item.date}</div>
-                        <div style={{ background: '#f8fafc', padding: '10px', borderRadius: '8px', fontSize: '0.75rem', color: '#1e293b' }}>
+                        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563eb', marginBottom: '4px' }}>{item.date}</div>
+                        <div style={{ background: '#f8fafc', padding: '10px', borderRadius: '8px', fontSize: '0.8rem' }}>
                           <div style={{ marginBottom: '2px' }}><span style={{ color: '#64748b' }}>Phòng:</span> <strong>{item.clinic}</strong></div>
                           <div style={{ color: '#ef4444', fontWeight: 600 }}>{item.diag}</div>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <button className="btn btn-outline" style={{ width: '100%', marginTop: '1.5rem', fontSize: '0.8rem', padding: '8px' }}>
-                    <Eye size={14} /> Xem tất cả lịch sử
+                  <button className="btn btn-outline" style={{ width: '100%', marginTop: '1.5rem', fontSize: '0.85rem' }}>
+                    <Eye size={16} /> Xem tất cả lịch sử
                   </button>
                 </div>
               </div>
@@ -673,7 +789,10 @@ const RegistrationList = () => {
         .badge-target { background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
         .animate-fade { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .modern-input, .modern-select { padding: 8px 12px; border-radius: 10px; border: 1px solid #e2e8f0; background: #fff; font-size: 0.85rem; outline: none; transition: all 0.2s; }
+        .form-field { display: flex; flex-direction: column; gap: 6px; }
+        .form-field label { font-size: 0.8rem; font-weight: 600; color: #475569; }
+        .modern-input, .modern-select { padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0; background: #fff; font-size: 0.85rem; outline: none; transition: all 0.2s; }
+        .modern-input:focus, .modern-select:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
       `}</style>
     </div>
   );
