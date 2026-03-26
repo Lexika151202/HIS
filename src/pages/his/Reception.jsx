@@ -26,6 +26,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 const Reception = () => {
   const [showRegPopup, setShowRegPopup] = useState(false);
   const [showHistoryPopup, setShowHistoryPopup] = useState(false);
+  const [showInsuranceHistoryPopup, setShowInsuranceHistoryPopup] = useState(false);
 
   const renderFilterRow = () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', marginBottom: '1.5rem', background: '#f8fafc', padding: '1rem', borderRadius: '10px', border: '1px solid #f1f5f9' }}>
@@ -82,16 +83,68 @@ const Reception = () => {
             </thead>
             <tbody>
               <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                <td style={{ padding: '12px', textAlign: 'center', whiteSpace: 'nowrap' }}>1</td>
-                <td style={{ padding: '12px', whiteSpace: 'nowrap' }}>24/03/2026 08:50</td>
-                <td style={{ padding: '12px', whiteSpace: 'nowrap' }}>116 - Tai mũi họng</td>
-                <td style={{ padding: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>Nguyễn Thị Bình</td>
-                <td style={{ padding: '12px', color: '#ef4444', fontWeight: 500, lineHeight: '1.4', wordBreak: 'break-word', minWidth: '300px' }}>
-                  H65.2 - Viêm tai giữa xuất tiết mạn tính (Viêm tai giữa thanh dịch mạn tính; Viêm tai giữa mạn tính có dịch tiết không mủ)
-                </td>
+                <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>Chưa có dữ liệu</td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </Modal>
+
+      <Modal isOpen={showInsuranceHistoryPopup} onClose={() => setShowInsuranceHistoryPopup(false)} title="Lịch sử sử dụng thẻ BHYT">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {/* Info Section */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+            <div className="card" style={{ padding: '1.25rem', border: '1px solid #e2e8f0' }}>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#2563eb', marginBottom: '1rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>Thông tin hành chính</h4>
+              <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: '8px', fontSize: '0.85rem' }}>
+                <span style={{ color: '#64748b' }}>Họ tên:</span> <strong>---</strong>
+                <span style={{ color: '#64748b' }}>Ngày sinh:</span> <strong>---</strong>
+                <span style={{ color: '#64748b' }}>Địa chỉ:</span> <span>---</span>
+              </div>
+            </div>
+            <div className="card" style={{ padding: '1.25rem', border: '1px solid #e2e8f0' }}>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#2563eb', marginBottom: '1rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>Thông tin bảo hiểm</h4>
+              <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '8px 16px', fontSize: '0.85rem' }}>
+                <span style={{ color: '#64748b' }}>Số BHXH:</span> <strong>---</strong>
+                <span style={{ color: '#64748b' }}>Mã DKKCB ban đầu:</span> <strong>---</strong>
+                <span style={{ color: '#64748b' }}>Cơ quan BHXH:</span> <span>---</span>
+                <span style={{ color: '#64748b' }}>Mã KV:</span> <span>---</span>
+                <span style={{ color: '#64748b' }}>Hạn thẻ:</span> <span>---</span>
+                <span style={{ color: '#64748b' }}>Ngày đủ 5 năm:</span> <span>---</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Treatment History Table */}
+          <div className="card" style={{ padding: 0, border: '1px solid #e2e8f0', borderRadius: '10px', overflow: 'hidden' }}>
+            <div style={{ padding: '12px 1rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1e293b' }}>Danh sách đợt điều trị</h4>
+            </div>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.825rem' }}>
+                <thead>
+                  <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                    <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Mã hồ sơ</th>
+                    <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Mã CSKCB</th>
+                    <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700 }}>Ngày vào</th>
+                    <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700 }}>Ngày ra</th>
+                    <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Tình trạng</th>
+                    <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Tên bệnh</th>
+                    <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Kết quả điều trị</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td colSpan="7" style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>Chưa có dữ liệu</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+            <button className="btn btn-primary" style={{ background: '#1e293b' }} onClick={() => setShowInsuranceHistoryPopup(false)}>Đóng</button>
+          </div>
         </div>
       </Modal>
 
@@ -346,6 +399,21 @@ const Reception = () => {
               <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>Lịch sử khám bệnh</h4>
               <button
                 onClick={() => setShowHistoryPopup(true)}
+                style={{ border: '1px solid #e2e8f0', background: '#fff', padding: '4px', borderRadius: '4px', cursor: 'pointer', color: '#64748b' }}
+              >
+                <Maximize2 size={14} />
+              </button>
+            </div>
+            <div style={{ border: '1px solid #f1f5f9', borderLeft: '3px solid #cbd5e1', borderRadius: '4px', padding: '12px', textAlign: 'center' }}>
+              <p style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Chưa chọn bệnh nhân</p>
+            </div>
+          </div>
+
+          <div className="card shadow-sm" style={{ padding: '1rem', border: 'none', background: '#fff' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+              <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>Lịch sử sử dụng BHYT</h4>
+              <button
+                onClick={() => setShowInsuranceHistoryPopup(true)}
                 style={{ border: '1px solid #e2e8f0', background: '#fff', padding: '4px', borderRadius: '4px', cursor: 'pointer', color: '#64748b' }}
               >
                 <Maximize2 size={14} />

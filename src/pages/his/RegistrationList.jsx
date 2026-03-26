@@ -44,9 +44,11 @@ const RegistrationList = () => {
   const [selectedHistoryVisitId, setSelectedHistoryVisitId] = useState('1');
   const [detailMode, setDetailMode] = useState('overview'); // 'overview', 'payment', 'examination'
   const [showActionDropdown, setShowActionDropdown] = useState(false);
+  const [showInsuranceHistoryPopup, setShowInsuranceHistoryPopup] = useState(false);
   const [historyExpandedVisits, setHistoryExpandedVisits] = useState(['1']);
   const [historyActiveTabs, setHistoryActiveTabs] = useState({ '1': 'services', '2': 'services', '3': 'services' });
   const [showServiceOrder, setShowServiceOrder] = useState(false);
+  const [showPrescriptionOrder, setShowPrescriptionOrder] = useState(false);
   const [collapseTree, setCollapseTree] = useState(false);
   const [collapseList, setCollapseList] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState(['1', '3', '4']);
@@ -219,6 +221,78 @@ const RegistrationList = () => {
                 </tr>
               </tbody>
             </table>
+          </div>
+        </Modal>
+
+        <Modal isOpen={showInsuranceHistoryPopup} onClose={() => setShowInsuranceHistoryPopup(false)} title="Lịch sử sử dụng thẻ BHYT">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            {/* Info Section */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+              <div className="card" style={{ padding: '1.25rem', border: '1px solid #e2e8f0' }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#2563eb', marginBottom: '1rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>Thông tin hành chính</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: '8px', fontSize: '0.85rem' }}>
+                  <span style={{ color: '#64748b' }}>Họ tên:</span> <strong>{selectedPatient?.name?.toUpperCase()}</strong>
+                  <span style={{ color: '#64748b' }}>Ngày sinh:</span> <strong>{selectedPatient?.dob}</strong>
+                  <span style={{ color: '#64748b' }}>Địa chỉ:</span> <span>Số 10, Yên Hòa, Cầu Giấy, Hà Nội</span>
+                </div>
+              </div>
+              <div className="card" style={{ padding: '1.25rem', border: '1px solid #e2e8f0' }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#2563eb', marginBottom: '1rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>Thông tin bảo hiểm</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '8px 16px', fontSize: '0.85rem' }}>
+                  <span style={{ color: '#64748b' }}>Số BHXH:</span> <strong>0107822001</strong>
+                  <span style={{ color: '#64748b' }}>Mã DKKCB ban đầu:</span> <strong>01078</strong>
+                  <span style={{ color: '#64748b' }}>Cơ quan BHXH:</span> <span>BHXH Thành phố Hà Nội</span>
+                  <span style={{ color: '#64748b' }}>Mã KV:</span> <span>K1</span>
+                  <span style={{ color: '#64748b' }}>Hạn thẻ:</span> <span>01/01/2026 - 31/12/2026</span>
+                  <span style={{ color: '#64748b' }}>Ngày đủ 5 năm:</span> <span>01/01/2021</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Treatment History Table */}
+            <div className="card" style={{ padding: 0, border: '1px solid #e2e8f0', borderRadius: '10px', overflow: 'hidden' }}>
+              <div style={{ padding: '12px 1rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1e293b' }}>Danh sách đợt điều trị</h4>
+              </div>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.825rem' }}>
+                  <thead>
+                    <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Mã hồ sơ</th>
+                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Mã CSKCB</th>
+                      <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700 }}>Ngày vào</th>
+                      <th style={{ padding: '12px', textAlign: 'center', fontWeight: 700 }}>Ngày ra</th>
+                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Tình trạng</th>
+                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Tên bệnh</th>
+                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: 700 }}>Kết quả điều trị</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { id: 'HS.26.001', cskcb: '01078', in: '15/02/2026', out: '20/02/2026', status: 'Ổn định', disease: 'J45.9 - Hen phế quản không xác định', result: 'Khỏi' },
+                      { id: 'HS.25.892', cskcb: '01045', in: '10/12/2025', out: '15/12/2025', status: 'Ra viện', disease: 'A90 - Sốt xuất huyết Dengue', result: 'Đỡ' },
+                      { id: 'HS.25.105', cskcb: '01078', in: '05/06/2025', out: '06/06/2025', status: 'Ra viện', disease: 'J20.9 - Viêm phế quản cấp', result: 'Khỏi' },
+                    ].map((row, idx) => (
+                      <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '12px', fontWeight: 600, color: '#2563eb' }}>{row.id}</td>
+                        <td style={{ padding: '12px' }}>{row.cskcb}</td>
+                        <td style={{ padding: '12px', textAlign: 'center' }}>{row.in}</td>
+                        <td style={{ padding: '12px', textAlign: 'center' }}>{row.out}</td>
+                        <td style={{ padding: '12px' }}>{row.status}</td>
+                        <td style={{ padding: '12px', color: '#64748b' }}>{row.disease}</td>
+                        <td style={{ padding: '12px' }}>
+                          <span style={{ padding: '2px 8px', borderRadius: '12px', background: row.result === 'Khỏi' ? '#dcfce7' : '#fef9c3', color: row.result === 'Khỏi' ? '#166534' : '#854d0e', fontWeight: 600, fontSize: '0.75rem' }}>{row.result}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+              <button className="btn btn-outline" style={{ background: '#fff' }} onClick={() => setShowInsuranceHistoryPopup(false)}>Đóng</button>
+            </div>
           </div>
         </Modal>
 
@@ -528,6 +602,17 @@ const RegistrationList = () => {
                   <div>C.Đoán: H65.2 - Viêm tai giữa...</div>
                 </div>
               </div>
+
+              <div className="card shadow-sm" style={{ padding: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>Lịch sử sử dụng BHYT</h4>
+                  <Maximize2 size={14} style={{ cursor: 'pointer' }} onClick={() => setShowInsuranceHistoryPopup(true)} />
+                </div>
+                <div style={{ background: '#f8fafc', padding: '8px 10px', fontSize: '0.7rem', borderRadius: '4px' }}>
+                  <div style={{ marginBottom: '2px' }}>Số BHXH: <span style={{ fontWeight: 600 }}>0107822001</span></div>
+                  <div>Hạn: <span style={{ color: '#10b981', fontWeight: 600 }}>01/01/26 - 31/12/26</span></div>
+                </div>
+              </div>
             </div>
           </div>
         ) : detailMode === 'payment' ? (
@@ -761,7 +846,7 @@ const RegistrationList = () => {
                     <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb', margin: 0 }}>Kê đơn thuốc</h3>
                     <div style={{ display: 'flex', gap: '0.75rem' }}>
                       <button className="btn btn-outline" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', background: '#fff' }}><Printer size={16} /> In phiếu</button>
-                      <button className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Plus size={16} /> Thêm thuốc</button>
+                      <button className="btn btn-primary" onClick={() => setShowPrescriptionOrder(true)} style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Plus size={16} /> Thêm thuốc</button>
                     </div>
                   </div>
                   <div style={{ overflowX: 'auto' }}>
@@ -1490,6 +1575,226 @@ const RegistrationList = () => {
                 <button className="btn btn-primary" onClick={() => setShowServiceOrder(false)} style={{ padding: '0 2rem' }}><Save size={16} /> Lưu</button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+      {/* Medication / Prescription Overlay */}
+      {showPrescriptionOrder && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1200, display: 'flex', flexDirection: 'column', background: '#f1f5f9', animation: 'fadeIn 0.2s ease-out' }}>
+          {/* Header Area */}
+          <div style={{ padding: '1.25rem 2rem', background: '#fff', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ background: '#eff6ff', width: '40px', height: '40px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Pill size={22} color="#2563eb" />
+              </div>
+              <div>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>KÊ ĐƠN THUỐC</h2>
+                <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500, marginTop: '2px' }}>Chi tiết đơn thuốc bệnh nhân</div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ width: '1px', height: '24px', background: '#e2e8f0', margin: '0 4px' }}></div>
+              <button onClick={() => setShowPrescriptionOrder(false)} style={{ background: '#f1f5f9', border: 'none', color: '#64748b', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: '0.2s' }} onMouseEnter={(e) => e.target.style.background = '#e2e8f0'} onMouseLeave={(e) => e.target.style.background = '#f1f5f9'}>
+                <XCircle size={20} />
+              </button>
+            </div>
+          </div>
+
+          {/* Patient Info Card (Sync design) */}
+          <div style={{ padding: '0.75rem 2rem', background: '#fff', borderBottom: '1px solid #e2e8f0' }}>
+            <div className="patient-info-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 20px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', gap: '32px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <User size={18} color="#64748b" />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>Bệnh nhân</div>
+                    <div style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.95rem' }}>{selectedPatient?.name || 'Lê Thị Loan'} <span style={{ fontWeight: 400, color: '#64748b' }}>({selectedPatient?.gender || 'Nữ'} - {selectedPatient?.yob || '1982'})</span></div>
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>Bảo hiểm y tế</div>
+                  <div style={{ fontWeight: 600, color: '#334155' }}>GD40101... (L4)</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>Chẩn đoán</div>
+                  <div style={{ fontWeight: 600, color: '#ef4444' }}>M54 - Đau lưng (Dorsalgia)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div style={{ flex: 1, overflow: 'hidden', padding: '1.5rem 2rem', display: 'flex', gap: '1.5rem' }}>
+            {/* Left Panel: Form Metadata */}
+            <div style={{ width: '380px', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div className="card shadow-sm" style={{ padding: '1.25rem', border: 'none', background: '#fff' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.25rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>
+                  <FileText size={18} color="#2563eb" />
+                  <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1e293b' }}>THÔNG TIN ĐƠN THUỐC</h3>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }}>
+                  <div className="form-field">
+                    <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Hình thức mua</label>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                      <button className="btn btn-primary btn-sm" style={{ flex: 1, height: '32px', borderRadius: '6px' }}>Tại bệnh viện</button>
+                      <button className="btn btn-outline btn-sm" style={{ flex: 1, height: '32px', borderRadius: '6px', background: '#fff' }}>Mua ngoài</button>
+                    </div>
+                  </div>
+                  <div className="form-field">
+                    <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Nơi lĩnh thuốc</label>
+                    <select className="modern-select"><option>Kho dược Trạm y tế</option></select>
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <div className="form-field" style={{ flex: 1.5 }}>
+                      <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Ngày kê</label>
+                      <input type="date" className="modern-input" defaultValue="2026-03-26" />
+                    </div>
+                    <div className="form-field" style={{ flex: 1 }}>
+                      <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Giờ</label>
+                      <input type="time" className="modern-input" defaultValue="00:30" />
+                    </div>
+                  </div>
+                  <div className="form-field">
+                    <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Bác sĩ kê đơn</label>
+                    <select className="modern-select"><option>Cao Thu Hằng</option></select>
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <div className="form-field" style={{ flex: 1 }}>
+                      <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Ngày tái khám</label>
+                      <input type="date" className="modern-input" />
+                    </div>
+                    <div className="form-field" style={{ flex: 0.6 }}>
+                      <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Số thang</label>
+                      <input type="number" className="modern-input" defaultValue="1" />
+                    </div>
+                  </div>
+                  <div className="form-field">
+                    <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>Lời dặn bác sĩ</label>
+                    <textarea className="modern-input" rows="2" placeholder="Nghỉ ngơi, tránh vận động mạnh..."></textarea>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', cursor: 'pointer' }}>
+                      <input type="checkbox" /> SMS uống thuốc
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', cursor: 'pointer' }}>
+                      <input type="checkbox" /> SMS nhắc tái khám
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Panel: Drug List & Selection */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              {/* Drug Search / Quick Add Row */}
+              <div className="card shadow-sm" style={{ padding: '1rem 1.5rem', border: 'none', background: '#fff' }}>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
+                  <div className="form-field" style={{ flex: 2.5 }}>
+                    <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '6px' }}>TÌM DƯỢC PHẨM</label>
+                    <div style={{ position: 'relative' }}>
+                      <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                      <input type="text" className="modern-input" placeholder="Mã dược / Tên dược / Hoạt chất..." style={{ paddingLeft: '40px', height: '42px', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)' }} />
+                    </div>
+                  </div>
+                  <div className="form-field" style={{ flex: 1 }}>
+                    <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '6px' }}>SỐ NGÀY</label>
+                    <input type="number" className="modern-input" defaultValue="7" style={{ height: '42px', textAlign: 'center', fontWeight: 700 }} />
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', flex: 2.5 }}>
+                    <div className="form-field" style={{ flex: 1 }}>
+                      <label style={{ fontSize: '0.65rem', fontWeight: 700, color: '#64748b', textAlign: 'center' }}>SÁNG</label>
+                      <input type="text" className="modern-input" defaultValue="1" style={{ height: '42px', textAlign: 'center' }} />
+                    </div>
+                    <div className="form-field" style={{ flex: 1 }}>
+                      <label style={{ fontSize: '0.65rem', fontWeight: 700, color: '#64748b', textAlign: 'center' }}>TRƯA</label>
+                      <input type="text" className="modern-input" defaultValue="0" style={{ height: '42px', textAlign: 'center' }} />
+                    </div>
+                    <div className="form-field" style={{ flex: 1 }}>
+                      <label style={{ fontSize: '0.65rem', fontWeight: 700, color: '#64748b', textAlign: 'center' }}>CHIỀU</label>
+                      <input type="text" className="modern-input" defaultValue="1" style={{ height: '42px', textAlign: 'center' }} />
+                    </div>
+                  </div>
+                  <button className="btn btn-primary" style={{ height: '42px', padding: '0 1.5rem', display: 'flex', gap: '8px', borderRadius: '10px' }}>
+                    <Plus size={18} /> Thêm vào đơn
+                  </button>
+                </div>
+              </div>
+
+              {/* Added Drugs Table */}
+              <div className="card shadow-sm" style={{ flex: 1, border: 'none', background: '#fff', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1e293b' }}>CHI TIẾT ĐƠN THUỐC</h3>
+                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Tổng số: <span style={{ color: '#2563eb', fontWeight: 700 }}>2</span> dược phẩm</div>
+                </div>
+                <div style={{ flex: 1, overflowY: 'auto' }}>
+                  <table className="compact-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead style={{ position: 'sticky', top: 0, background: '#f8fafc', zIndex: 10 }}>
+                      <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                        <th style={{ textAlign: 'center', width: '40px' }}>STT</th>
+                        <th style={{ textAlign: 'left', width: '100px' }}>Mã dược</th>
+                        <th style={{ textAlign: 'left', minWidth: '200px' }}>Tên dược / Hoạt chất</th>
+                        <th style={{ textAlign: 'center' }}>ĐVT</th>
+                        <th style={{ textAlign: 'center' }}>Số ngày</th>
+                        <th style={{ textAlign: 'center' }}>Sáng-Trưa-Chiều-Tối</th>
+                        <th style={{ textAlign: 'center' }}>Số lượng</th>
+                        <th style={{ textAlign: 'left' }}>Cách dùng</th>
+                        <th style={{ textAlign: 'center', width: '80px' }}>Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { code: 'D001', name: 'Paracetamol 500mg', active: 'Paracetamol', unit: 'Viên', days: 5, schedule: '1-0-1-0', qty: 10, usage: 'Uống sau ăn' },
+                        { code: 'D042', name: 'Alpha chymotrypsin', active: 'Chymotrypsin', unit: 'Viên', days: 5, schedule: '2-0-2-0', qty: 20, usage: 'Uống sau ăn' }
+                      ].map((d, i) => (
+                        <tr key={i} className="hover-row" style={{ borderBottom: '1px solid #f1f5f9' }}>
+                          <td style={{ textAlign: 'center', color: '#94a3b8' }}>{i + 1}</td>
+                          <td style={{ fontWeight: 600, color: '#475569' }}>{d.code}</td>
+                          <td>
+                            <div style={{ fontWeight: 700, color: '#334155' }}>{d.name}</div>
+                            <div style={{ fontSize: '0.7rem', color: '#64748b' }}>{d.active}</div>
+                          </td>
+                          <td style={{ textAlign: 'center' }}>{d.unit}</td>
+                          <td style={{ textAlign: 'center' }}>{d.days}</td>
+                          <td style={{ textAlign: 'center' }}>
+                            <div style={{ display: 'flex', gap: '2px', justifyContent: 'center' }}>
+                              {d.schedule.split('-').map((v, idx) => (
+                                <span key={idx} style={{ padding: '2px 4px', background: v === '0' ? '#f1f5f9' : '#eff6ff', borderRadius: '4px', fontSize: '0.75rem', fontWeight: v === '0' ? 400 : 700, color: v === '0' ? '#94a3b8' : '#2563eb', border: v === '0' ? 'none' : '1px solid #bfdbfe' }}>{v}</span>
+                              ))}
+                            </div>
+                          </td>
+                          <td style={{ textAlign: 'center', fontWeight: 800, color: '#1e293b' }}>{d.qty}</td>
+                          <td style={{ fontSize: '0.8rem' }}>{d.usage}</td>
+                          <td style={{ textAlign: 'center' }}>
+                            <div style={{ display: 'flex', gap: '4px', justifyContent: 'center' }}>
+                              <div className="action-circle-btn" style={{ width: '28px', height: '28px', borderColor: '#fee2e2' }}><Trash2 size={12} color="#ef4444" /></div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div style={{ padding: '1rem 1.5rem', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: '2rem' }}>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>TỔNG KHOẢN</div>
+                    <div style={{ fontWeight: 700, color: '#1e293b' }}>2</div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>THÀNH TIỀN</div>
+                    <div style={{ fontWeight: 800, color: '#2563eb', fontSize: '1.1rem' }}>85.000 VNĐ</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Action Footer */}
+          <div style={{ padding: '1.25rem 2rem', background: '#fff', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+            <button className="btn btn-outline" style={{ background: '#fff', padding: '0 2rem', height: '44px' }} onClick={() => setShowPrescriptionOrder(false)}>Đóng (Esc)</button>
+            <button className="btn btn-outline" style={{ background: '#fff', padding: '0 1.5rem', height: '44px' }}><Printer size={18} /> In đơn thuốc</button>
+            <button className="btn btn-primary" style={{ padding: '0 2.5rem', height: '44px', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }} onClick={() => setShowPrescriptionOrder(false)}><Save size={18} /> Lưu đơn</button>
           </div>
         </div>
       )}
