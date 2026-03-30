@@ -1,14 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import {
-  Home, Users, Syringe, Database, Bell, CreditCard, Settings, Layout, Calendar,
-  Package, ClipboardList, ArrowLeftRight, Layers, MessageSquare, ShieldCheck, Stethoscope, Plus,
-  FileText, Activity
+  Users, Syringe, ClipboardList, ArrowLeftRight, ShieldCheck, Stethoscope, Plus,
+  FileText, Activity, Settings, Pencil, Trash2, Calendar, ChevronRight, ChevronDown, Save, RotateCcw, Printer
 } from 'lucide-react';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell
-} from 'recharts';
 
 // --- Page Imports ---
 import Reception from './pages/his/Reception';
@@ -22,25 +17,7 @@ import PermissionDetail from './pages/his/admin/PermissionDetail';
 import UserList from './pages/his/admin/UserList';
 import UserDetail from './pages/his/admin/UserDetail';
 
-// --- Mock Data for Dashboard ---
-const patientStats = [
-  { name: 'T2', count: 45, samples: 12 },
-  { name: 'T3', count: 52, samples: 15 },
-  { name: 'T4', count: 38, samples: 8 },
-  { name: 'T5', count: 65, samples: 22 },
-  { name: 'T6', count: 48, samples: 18 },
-  { name: 'T7', count: 72, samples: 25 },
-  { name: 'CN', count: 30, samples: 10 },
-];
-
-const sampleDistribution = [
-  { name: 'Máu dây rốn', value: 400, color: '#f43f5e' },
-  { name: 'Dịch vụ', value: 300, color: '#2563eb' },
-  { name: 'Máu ngoại vi', value: 200, color: '#10b981' },
-  { name: 'Khối bạch cầu', value: 100, color: '#f59e0b' },
-];
-
-// --- Sidebar Component ---
+// --- Components ---
 
 const NavLink = ({ to, icon: Icon, label }) => {
   const location = useLocation();
@@ -73,15 +50,8 @@ const Sidebar = ({ role, onLogout }) => {
 
         {role === 'admin' && (
           <>
-            {/* <div className="nav-group"> */}
-            {/* <p className="nav-label">Phân quyền</p> */}
             <NavLink to="/admin/permissions" icon={ShieldCheck} label="Phân quyền" />
-            {/* </div> */}
-
-            {/* <div className="nav-group"> */}
-            {/* <p className="nav-label">Người dùng</p> */}
             <NavLink to="/admin/users" icon={Users} label="Người dùng" />
-            {/* </div> */}
           </>
         )}
       </div>
@@ -98,81 +68,6 @@ const Sidebar = ({ role, onLogout }) => {
   );
 };
 
-// --- Dashboard Component ---
-
-const Dashboard = () => (
-  <div className="animate-fade">
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-      <h1>Hệ thống Quản lý Y tế Tổng hợp</h1>
-      <div style={{ padding: '0.5rem 1rem', background: '#fff', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '0.85rem' }}>
-        <Calendar size={14} style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} /> {new Date().toLocaleDateString('vi-VN')}
-      </div>
-    </div>
-
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
-      <div className="card">
-        <p className="text-muted">Bệnh nhân hôm nay</p>
-        <h2 style={{ fontSize: '2rem' }}>1,284</h2>
-        <p className="badge badge-success" style={{ marginTop: '0.5rem' }}>+12% vs hôm qua</p>
-      </div>
-      <div className="card">
-        <p className="text-muted">Mẫu mới thu thập</p>
-        <h2 style={{ fontSize: '2rem' }}>45</h2>
-        <p className="badge badge-warning" style={{ marginTop: '0.5rem' }}>Đợi tiếp nhận</p>
-      </div>
-      <div className="card">
-        <p className="text-muted">Tỉ lệ lấp đầy kho</p>
-        <h2 style={{ fontSize: '2rem' }}>68%</h2>
-        <p className="badge badge-danger" style={{ marginTop: '0.5rem' }}>Gần đầy (Tủ #04)</p>
-      </div>
-      <div className="card">
-        <p className="text-muted">Doanh thu phí dịch vụ</p>
-        <h2 style={{ fontSize: '2rem' }}>450.2M</h2>
-        <p className="badge badge-success" style={{ marginTop: '0.5rem' }}>+5.4%</p>
-      </div>
-    </div>
-
-    <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 1fr', gap: '1.5rem' }}>
-      <div className="card">
-        <h3>Lưu lượng Bệnh nhân & Mẫu (7 ngày qua)</h3>
-        <div style={{ height: '350px', marginTop: '1.5rem' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={patientStats}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="count" fill="var(--primary)" name="Bệnh nhân" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="samples" fill="var(--accent)" name="Mẫu máu/Mô" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-      <div className="card">
-        <h3>Phân loại Mẫu lưu trữ</h3>
-        <div style={{ height: '350px', marginTop: '1.5rem' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={sampleDistribution}
-                innerRadius={70}
-                outerRadius={100}
-                paddingAngle={8}
-                dataKey="value"
-                stroke="none"
-              >
-                {sampleDistribution.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-    </div>
-  </div>
-);
 
 // --- Main App ---
 
@@ -198,7 +93,7 @@ function App() {
         <main className="main-content" style={{ flex: 1, padding: '2rem', background: '#f8fafc', overflowY: 'auto' }}>
           <Routes>
             {/* Common Route */}
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Navigate to={userRole === 'admin' ? '/admin/permissions' : '/his/reception'} replace />} />
 
             {/* Staff Routes */}
             {userRole === 'staff' && (

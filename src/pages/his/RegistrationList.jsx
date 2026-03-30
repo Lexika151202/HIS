@@ -335,111 +335,130 @@ const RegistrationList = () => {
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-              {detailMode === 'overview' && (
+              {!isEdit && (
                 <>
-                  <button className="btn btn-outline" style={{ background: '#fff', height: '42px', padding: '0 1.25rem' }}><Printer size={18} /> In phiếu</button>
-                  <button className="btn btn-outline" style={{ background: '#fff', height: '42px', padding: '0 1.25rem' }} onClick={() => setDetailMode('payment')}>
-                    <CircleDollarSign size={18} /> Thanh toán
-                  </button>
-                  <button className="btn btn-outline" style={{ background: '#fff', height: '42px', padding: '0 1.25rem' }} onClick={() => setDetailMode('examination')}>
-                    <Stethoscope size={18} /> Khám bệnh
-                  </button>
+                  {detailMode === 'overview' && (
+                    <>
+                      <button className="btn btn-outline" style={{ background: '#fff', height: '42px', padding: '0 1.25rem' }}><Printer size={18} /> In phiếu</button>
+                      <button className="btn btn-outline" style={{ background: '#fff', height: '42px', padding: '0 1.25rem' }} onClick={() => setDetailMode('payment')}>
+                        <CircleDollarSign size={18} /> Thanh toán
+                      </button>
+                      <button className="btn btn-outline" style={{ background: '#fff', height: '42px', padding: '0 1.25rem' }} onClick={() => setDetailMode('examination')}>
+                        <Stethoscope size={18} /> Khám bệnh
+                      </button>
+                    </>
+                  )}
+
+                  {detailMode === 'payment' && (
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        height: '42px', padding: '0 1.5rem', borderRadius: '12px',
+                        background: '#10b981', color: '#fff', border: 'none',
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        fontWeight: 600, cursor: 'pointer',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                      }}
+                      onClick={() => setDetailMode('overview')}
+                    >
+                      <CheckCircle size={18} /> Xác nhận
+                    </button>
+                  )}
+
+                  {detailMode === 'examination' && (
+                    <>
+                      <button
+                        className="btn btn-outline"
+                        style={{
+                          background: '#fff',
+                          height: '42px',
+                          padding: '0 1.25rem',
+                          borderColor: '#fee2e2',
+                          color: '#ef4444',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          fontWeight: 600
+                        }}
+                        onClick={() => setShowUndoConfirm(true)}
+                      >
+                        <RotateCcw size={18} /> Hủy xác nhận chi phí
+                      </button>
+                      <button className="btn btn-outline" style={{ background: '#fff', height: '42px', padding: '0 1.25rem' }}><Printer size={18} /> In phiếu</button>
+                    </>
+                  )}
                 </>
               )}
 
-              {detailMode === 'payment' && (
-                <button
-                  className="btn btn-primary"
-                  style={{
-                    height: '42px', padding: '0 1.5rem', borderRadius: '12px',
-                    background: '#10b981', color: '#fff', border: 'none',
-                    display: 'flex', alignItems: 'center', gap: '8px',
-                    fontWeight: 600, cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                  }}
-                  onClick={() => setDetailMode('overview')}
-                >
-                  <CheckCircle size={18} /> Xác nhận
-                </button>
-              )}
-
-              {detailMode === 'examination' && selectedPatient?.hasRecord && (
-                <>
-                  <button
-                    className="btn btn-outline"
-                    style={{
-                      background: '#fff',
-                      height: '42px',
-                      padding: '0 1.25rem',
-                      borderColor: '#fee2e2',
-                      color: '#ef4444',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      fontWeight: 600
-                    }}
-                    onClick={() => setShowUndoConfirm(true)}
-                  >
-                    <RotateCcw size={18} /> Hủy xác nhận chi phí
-                  </button>
-                  <button className="btn btn-outline" style={{ background: '#fff', height: '42px', padding: '0 1.25rem' }}><Printer size={18} /> In phiếu</button>
-                </>
-              )}
-
-              {/* Action Dropdown and Save button handling */}
-              {!selectedPatient?.hasRecord || isEdit ? (
-                <button
-                  className="btn btn-primary"
-                  style={{
-                    height: '42px', padding: '0 2.5rem', borderRadius: '12px',
-                    background: '#2563eb', color: '#fff', border: 'none',
-                    display: 'flex', alignItems: 'center', gap: '8px',
-                    fontWeight: 600, cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)'
-                  }}
-                  onClick={() => setShowSaveConfirm(true)}
-                >
-                  <Save size={18} /> Lưu
-                </button>
-              ) : (
-                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                  <div style={{ position: 'relative' }}>
+              {/* Action Buttons Handling */}
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                {isEdit ? (
+                  <>
                     <button
                       className="btn btn-outline"
-                      style={{ background: '#fff', height: '42px', padding: '0 1rem', display: 'flex', gap: '8px' }}
-                      onClick={() => setShowActionDropdown(!showActionDropdown)}
+                      style={{ height: '42px', padding: '0 1.5rem', borderRadius: '12px', background: '#fff', fontWeight: 600 }}
+                      onClick={() => setIsEdit(false)}
                     >
-                      <Settings size={18} /> Thao tác <ChevronDown size={14} style={{ transform: showActionDropdown ? 'rotate(180deg)' : 'none', transition: '0.2s' }} />
+                      Hủy
                     </button>
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        height: '42px', padding: '0 1.5rem', borderRadius: '12px',
+                        background: '#2563eb', color: '#fff', border: 'none',
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        fontWeight: 600, cursor: 'pointer',
+                        boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)'
+                      }}
+                      onClick={() => setShowSaveConfirm(true)}
+                    >
+                      <Save size={18} /> Lưu
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {/* Only show 'Lưu' without 'Thao tác' if it's a completely new entry without a record (if your logic requires this) */}
+                    {/* But in this screen, we are usually viewing/editing existing registrations from the list. */}
+                    
+                    <div style={{ position: 'relative' }}>
+                      <button
+                        className="btn btn-outline"
+                        style={{ background: '#fff', height: '42px', padding: '0 1rem', display: 'flex', gap: '8px' }}
+                        onClick={() => setShowActionDropdown(!showActionDropdown)}
+                      >
+                        <Settings size={18} /> Thao tác <ChevronDown size={14} style={{ transform: showActionDropdown ? 'rotate(180deg)' : 'none', transition: '0.2s' }} />
+                      </button>
 
-                    {showActionDropdown && (
-                      <div className="card shadow-lg" style={{
-                        position: 'absolute', top: '100%', right: 0, marginTop: '8px',
-                        zIndex: 1000, width: '180px', padding: '6px', border: '1px solid #f1f5f9'
-                      }}>
-                        <button
-                          className="dropdown-item"
-                          onClick={() => { setIsEdit(true); setShowActionDropdown(false); }}
-                          style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '10px', padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }}
-                          onMouseEnter={(e) => e.target.style.background = '#f8fafc'}
-                          onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                        >
-                          <Pencil size={16} color="#64748b" /> Chỉnh sửa
-                        </button>
-                        <button
-                          className="dropdown-item"
-                          onClick={() => { setShowDeleteConfirm(true); setShowActionDropdown(false); }}
-                          style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '10px', padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }}
-                          onMouseEnter={(e) => e.target.style.background = '#fcf2f2'}
-                          onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                        >
-                          <Trash2 size={16} color="#ef4444" /> Xóa
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+                      {showActionDropdown && (
+                        <div className="card shadow-lg" style={{
+                          position: 'absolute', top: '100%', right: 0, marginTop: '8px',
+                          zIndex: 1000, width: '180px', padding: '6px', border: '1px solid #f1f5f9',
+                          background: '#fff'
+                        }}>
+                          <button
+                            className="dropdown-item"
+                            onClick={() => { setIsEdit(true); setShowActionDropdown(false); }}
+                            style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '10px', padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }}
+                            onMouseEnter={(e) => e.target.style.background = '#f8fafc'}
+                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                          >
+                            <Pencil size={16} color="#64748b" /> Chỉnh sửa
+                          </button>
+                          <button
+                            className="dropdown-item"
+                            onClick={() => { setShowDeleteConfirm(true); setShowActionDropdown(false); }}
+                            style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '10px', padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }}
+                            onMouseEnter={(e) => e.target.style.background = '#fcf2f2'}
+                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                          >
+                            <Trash2 size={16} color="#ef4444" /> Xóa
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 

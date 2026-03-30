@@ -163,7 +163,7 @@ const PermissionDetail = () => {
           </div>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
-          {!isNew && (
+          {!isNew && !isEdit && (
             <button className="btn" onClick={() => setShowDeleteConfirm(true)} style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fee2e2', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Trash2 size={18} /> Xóa
             </button>
@@ -173,9 +173,18 @@ const PermissionDetail = () => {
               <Pencil size={18} /> Chỉnh sửa
             </button>
           ) : (
-             <button className="btn btn-primary" onClick={() => setShowSaveConfirm(true)} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Save size={18} /> {isNew ? 'Tạo nhóm quyền' : 'Lưu thay đổi'}
-            </button>
+            <>
+              <button 
+                className="btn btn-outline" 
+                onClick={() => isNew ? navigate('/admin/permissions') : setIsEdit(false)} 
+                style={{ background: '#fff', border: '1px solid #e2e8f0', fontWeight: 600 }}
+              >
+                Hủy
+              </button>
+              <button className="btn btn-primary" onClick={() => setShowSaveConfirm(true)} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Save size={18} /> {isNew ? 'Tạo nhóm quyền' : 'Lưu thay đổi'}
+              </button>
+            </>
           )}
         </div>
       </div>

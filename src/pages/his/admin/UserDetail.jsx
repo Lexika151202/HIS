@@ -289,7 +289,7 @@ const UserDetail = () => {
           </div>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
-          {!isNew && (
+          {!isNew && !isEdit && (
             <>
               <button 
                 className="btn" 
@@ -320,9 +320,18 @@ const UserDetail = () => {
               <Pencil size={18} /> Chỉnh sửa
             </button>
           ) : (
-            <button className="btn btn-primary" onClick={() => setShowSaveConfirm(true)} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Save size={18} /> {isNew ? 'Tạo tài khoản' : 'Lưu thay đổi'}
-            </button>
+            <>
+              <button 
+                className="btn btn-outline" 
+                onClick={() => isNew ? navigate('/admin/users') : setIsEdit(false)} 
+                style={{ background: '#fff', border: '1px solid #e2e8f0', fontWeight: 600 }}
+              >
+                Hủy
+              </button>
+              <button className="btn btn-primary" onClick={() => setShowSaveConfirm(true)} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Save size={18} /> {isNew ? 'Tạo tài khoản' : 'Lưu thay đổi'}
+              </button>
+            </>
           )}
         </div>
       </div>
