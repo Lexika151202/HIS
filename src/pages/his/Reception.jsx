@@ -5,6 +5,7 @@ import {
   FileText, CreditCard, Heart, ArrowRight, X, RotateCcw,
   IdCard, Phone, Briefcase, Building, ChevronDown, Maximize2, RefreshCw
 } from 'lucide-react';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
@@ -27,6 +28,7 @@ const Reception = () => {
   const [showRegPopup, setShowRegPopup] = useState(false);
   const [showHistoryPopup, setShowHistoryPopup] = useState(false);
   const [showInsuranceHistoryPopup, setShowInsuranceHistoryPopup] = useState(false);
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
 
   const renderFilterRow = () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', marginBottom: '1.5rem', background: '#f8fafc', padding: '1rem', borderRadius: '10px', border: '1px solid #f1f5f9' }}>
@@ -156,7 +158,7 @@ const Reception = () => {
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button className="btn btn-outline" style={{ background: '#fff' }}><RotateCcw size={18} /> Làm mới (F5)</button>
-          <button className="btn btn-primary" style={{ padding: '0.75rem 1.5rem', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}><Save size={18} /> Lưu & Tiếp đón</button>
+          <button className="btn btn-primary" onClick={() => setShowSaveConfirm(true)} style={{ padding: '0.75rem 1.5rem', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}><Save size={18} /> Lưu & Tiếp đón</button>
         </div>
       </div>
 
@@ -438,6 +440,15 @@ const Reception = () => {
         .animate-fade { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
+    <ConfirmationModal 
+        isOpen={showSaveConfirm}
+        onClose={() => setShowSaveConfirm(false)}
+        onConfirm={() => {}}
+        title="Tiếp đón bệnh nhân"
+        message="Xác nhận lưu thông tin và thực hiện tiếp đón bệnh nhân này?"
+        type="success"
+        confirmText="Xác nhận"
+      />
     </div>
   );
 };

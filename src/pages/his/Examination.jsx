@@ -7,9 +7,15 @@ import {
   Activity, Printer, Save, Plus, LogIn, Pill, FileText, History, Pencil,
   ChevronLeft, Minus, Settings, ChevronDown, Edit
 } from 'lucide-react';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 const Examination = () => {
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'details'
+  const [isEdit, setIsEdit] = useState(false);
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showUndoConfirm, setShowUndoConfirm] = useState(false);
+
   const [showServiceOrder, setShowServiceOrder] = useState(false);
   const [showPrescriptionOrder, setShowPrescriptionOrder] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState(['1', '3', '4']); // IDs of expanded categories
@@ -221,7 +227,7 @@ const Examination = () => {
                               gap: '4px'
                             }}
                             title="Hủy xác nhận chi phí"
-                            onClick={(e) => { e.stopPropagation(); }}
+                            onClick={(e) => { e.stopPropagation(); setShowUndoConfirm(true); }}
                           >
                             <RotateCcw size={16} />
                           </button>
@@ -284,6 +290,7 @@ const Examination = () => {
                   gap: '8px',
                   fontWeight: 600
                 }}
+                onClick={() => setShowUndoConfirm(true)}
               >
                 <RotateCcw size={18} /> Hủy xác nhận chi phí
               </button>
@@ -303,10 +310,20 @@ const Examination = () => {
                     position: 'absolute', top: '100%', right: 0, marginTop: '8px',
                     zIndex: 1000, width: '180px', padding: '6px', border: '1px solid #f1f5f9'
                   }}>
-                    <button className="dropdown-item" style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '10px', padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }} onMouseEnter={(e) => e.target.style.background = '#f8fafc'} onMouseLeave={(e) => e.target.style.background = 'transparent'}>
-                      <Settings size={16} color="#64748b" /> Chỉnh sửa
+                    <button className="dropdown-item" 
+                      onClick={() => { setIsEdit(true); setShowActionDropdown(false); }}
+                      style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '10px', padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }} 
+                      onMouseEnter={(e) => e.target.style.background = '#f8fafc'} 
+                      onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                    >
+                      <Pencil size={16} color="#64748b" /> Chỉnh sửa
                     </button>
-                    <button className="dropdown-item" style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '10px', padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }} onMouseEnter={(e) => e.target.style.background = '#fcf2f2'} onMouseLeave={(e) => e.target.style.background = 'transparent'}>
+                    <button className="dropdown-item" 
+                      onClick={() => { setShowDeleteConfirm(true); setShowActionDropdown(false); }}
+                      style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '10px', padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }} 
+                      onMouseEnter={(e) => e.target.style.background = '#fcf2f2'} 
+                      onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                    >
                       <Trash2 size={16} color="#ef4444" /> Xóa
                     </button>
                   </div>
@@ -314,19 +331,21 @@ const Examination = () => {
               </div>
 
               <div style={{ width: '1px', height: '24px', background: '#e2e8f0', margin: '0 4px' }}></div>
-              <button
-                className="btn btn-primary"
-                style={{
-                  height: '42px', padding: '0 1.5rem', borderRadius: '12px',
-                  background: '#2563eb', color: '#fff', border: 'none',
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  fontWeight: 600, cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                }}
-                onClick={() => setViewMode('list')}
-              >
-                <Save size={18} /> Lưu
-              </button>
+              {isEdit && (
+                <button
+                  className="btn btn-primary"
+                  style={{
+                    height: '42px', padding: '0 1.5rem', borderRadius: '12px',
+                    background: '#2563eb', color: '#fff', border: 'none',
+                    display: 'flex', alignItems: 'center', gap: '8px',
+                    fontWeight: 600, cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  }}
+                  onClick={() => setShowSaveConfirm(true)}
+                >
+                  <Save size={18} /> Lưu
+                </button>
+              )}
             </div>
           </div>
 
@@ -334,13 +353,13 @@ const Examination = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
               {/* Patient Info Summary */}
-              <div className="card" style={{ padding: '1.25rem 1.5rem', border: 'none', background: '#fff' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
-                  <div><label style={{ fontSize: '0.75rem', color: '#64748b', display: 'block' }}>Mã BN</label><span style={{ fontWeight: 700 }}>0107822000811</span></div>
-                  <div><label style={{ fontSize: '0.75rem', color: '#64748b', display: 'block' }}>Họ và tên</label><span style={{ fontWeight: 700 }}>Lê Thị Loan</span></div>
-                  <div><label style={{ fontSize: '0.75rem', color: '#64748b', display: 'block' }}>Giới tính</label><span style={{ fontWeight: 600 }}>Nữ</span></div>
-                  <div><label style={{ fontSize: '0.75rem', color: '#64748b', display: 'block' }}>Ngày sinh</label><span style={{ fontWeight: 600 }}>19/10/1982</span></div>
-                  <div><label style={{ fontSize: '0.75rem', color: '#64748b', display: 'block' }}>BHYT</label><span style={{ fontWeight: 700, color: '#2563eb' }}>GD40101... (L4)</span></div>
+              <div className="card" style={{ padding: '1.25rem 2rem', border: '1px solid #e2e8f0', background: '#fff', borderRadius: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div><label style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', marginBottom: '4px' }}>Mã BN</label><span style={{ fontWeight: 800, color: '#1e293b', fontSize: '1rem' }}>0107822000811</span></div>
+                  <div><label style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', marginBottom: '4px' }}>Họ và tên</label><span style={{ fontWeight: 800, color: '#1e293b', fontSize: '1rem' }}>Lê Thị Loan</span></div>
+                  <div><label style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', marginBottom: '4px' }}>Giới tính</label><span style={{ fontWeight: 700, color: '#1e293b', fontSize: '1rem' }}>Nữ</span></div>
+                  <div><label style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', marginBottom: '4px' }}>Ngày sinh</label><span style={{ fontWeight: 700, color: '#1e293b', fontSize: '1rem' }}>19/10/1982</span></div>
+                  <div><label style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', marginBottom: '4px' }}>BHYT</label><span style={{ fontWeight: 800, color: '#2563eb', fontSize: '1rem' }}>GD4010101234567 (L4)</span></div>
                 </div>
               </div>
 
@@ -353,70 +372,70 @@ const Examination = () => {
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
-                  <div className="form-field"><label>Ngày vào khám</label><input type="date" className="modern-input" defaultValue="2026-03-23" /></div>
-                  <div className="form-field"><label>Giờ vào viện</label><input type="time" className="modern-input" defaultValue="07:51" /></div>
-                  <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Phòng khám</label><select className="modern-select"><option>109 | Phòng khám Đông y</option></select></div>
+                  <div className="form-field"><label>Ngày vào khám</label><input type="date" className="modern-input" defaultValue="2026-03-23" disabled={!isEdit} /></div>
+                  <div className="form-field"><label>Giờ vào viện</label><input type="time" className="modern-input" defaultValue="07:51" disabled={!isEdit} /></div>
+                  <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Phòng khám</label><select className="modern-select" disabled={!isEdit}><option>109 | Phòng khám Đông y</option></select></div>
 
                   <div className="form-field" style={{ gridColumn: 'span 2' }}>
                     <label>Triệu chứng / Diễn biến</label>
-                    <textarea className="modern-input" rows="3" defaultValue="Bệnh nhân đau nhức vùng thắt lưng vài ngày nay..."></textarea>
+                    <textarea className="modern-input" rows="3" defaultValue="Bệnh nhân đau nhức vùng thắt lưng vài ngày nay..." disabled={!isEdit}></textarea>
                   </div>
                   <div className="form-field" style={{ gridColumn: 'span 2' }}>
                     <label>Lý do vào viện</label>
-                    <textarea className="modern-input" rows="3" placeholder="Ghi chú lý do..."></textarea>
+                    <textarea className="modern-input" rows="3" placeholder="Ghi chú lý do..." disabled={!isEdit}></textarea>
                   </div>
 
                   {/* Diagnosis Row */}
                   <div className="form-field" style={{ gridColumn: 'span 1' }}>
                     <label>Bệnh chính (ICD10)</label>
-                    <select className="modern-select"><option>M54 - Đau lưng (Dorsalgia)</option></select>
+                    <select className="modern-select" disabled={!isEdit}><option>M54 - Đau lưng (Dorsalgia)</option></select>
                   </div>
                   <div className="form-field" style={{ gridColumn: 'span 3' }}>
                     <label>Diễn giải bệnh chính</label>
-                    <input type="text" className="modern-input" placeholder="Nhập diễn giải chi tiết cho bệnh chính..." />
+                    <input type="text" className="modern-input" placeholder="Nhập diễn giải chi tiết cho bệnh chính..." disabled={!isEdit} />
                   </div>
 
                   <div className="form-field" style={{ gridColumn: 'span 1' }}>
                     <label>Bệnh kèm theo (Chọn nhiều)</label>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', padding: '6px', border: '1px solid #e2e8f0', borderRadius: '10px', minHeight: '44px', background: '#fff' }}>
-                      <span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: '6px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>M47 - Thoái hoá cột sống <XCircle size={12} cursor="pointer" /></span>
-                      <input type="text" placeholder="Tìm..." style={{ border: 'none', outline: 'none', fontSize: '0.85rem', flex: 1, minWidth: '50px' }} />
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', padding: '6px', border: '1px solid #e2e8f0', borderRadius: '10px', minHeight: '44px', background: isEdit ? '#fff' : '#f8fafc' }}>
+                      <span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: '6px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>M47 - Thoái hoá cột sống {isEdit && <XCircle size={12} cursor="pointer" />}</span>
+                      {isEdit && <input type="text" placeholder="Tìm..." style={{ border: 'none', outline: 'none', fontSize: '0.85rem', flex: 1, minWidth: '50px' }} />}
                     </div>
                   </div>
                   <div className="form-field" style={{ gridColumn: 'span 3' }}>
                     <label>Diễn giải bệnh kèm theo</label>
-                    <input type="text" className="modern-input" placeholder="Nhập diễn giải cho các bệnh kèm theo..." />
+                    <input type="text" className="modern-input" placeholder="Nhập diễn giải cho các bệnh kèm theo..." disabled={!isEdit} />
                   </div>
 
                   {/* Treatment Row */}
                   <div className="form-field" style={{ gridColumn: 'span 2' }}>
                     <label>Tư vấn điều trị</label>
-                    <textarea className="modern-input" rows="2" defaultValue="khám, chuyển"></textarea>
+                    <textarea className="modern-input" rows="2" defaultValue="khám, chuyển" disabled={!isEdit}></textarea>
                   </div>
                   <div className="form-field" style={{ gridColumn: 'span 2' }}>
                     <label>Diễn biến điều trị</label>
-                    <textarea className="modern-input" rows="2" defaultValue="Bệnh nhân đau nhức vùng thắt lưng vài ngày nay. Khám bệnh nhân tỉnh, đau nhức nhiều, vận động đau tăng"></textarea>
+                    <textarea className="modern-input" rows="2" defaultValue="Bệnh nhân đau nhức vùng thắt lưng vài ngày nay. Khám bệnh nhân tỉnh, đau nhức nhiều, vận động đau tăng" disabled={!isEdit}></textarea>
                   </div>
 
-                  <div className="form-field"><label>Loại tai nạn</label><select className="modern-select"><option>-- Chọn loại tai nạn --</option></select></div>
-                  <div className="form-field"><label>Kết quả khám</label><select className="modern-select"><option>Không thay đổi</option><option>Khỏi</option><option>Đỡ/Giảm</option></select></div>
-                  <div className="form-field"><label>Loại khám chữa bệnh</label><select className="modern-select"><option>Khám bệnh</option></select></div>
-                  <div className="form-field"><label>Bác sĩ khám</label><select className="modern-select"><option>106 | Cao Thu Hằng</option></select></div>
+                  <div className="form-field"><label>Loại tai nạn</label><select className="modern-select" disabled={!isEdit}><option>-- Chọn loại tai nạn --</option></select></div>
+                  <div className="form-field"><label>Kết quả khám</label><select className="modern-select" disabled={!isEdit}><option>Không thay đổi</option><option>Khỏi</option><option>Đỡ/Giảm</option></select></div>
+                  <div className="form-field"><label>Loại khám chữa bệnh</label><select className="modern-select" disabled={!isEdit}><option>Khám bệnh</option></select></div>
+                  <div className="form-field"><label>Bác sĩ khám</label><select className="modern-select" disabled={!isEdit}><option>106 | Cao Thu Hằng</option></select></div>
 
                   <div className="form-field">
                     <label>Kết thúc khám</label>
                     <div style={{ display: 'flex', gap: '4px' }}>
-                      <input type="date" className="modern-input" defaultValue="2026-03-23" style={{ flex: 1.2, minWidth: '0' }} />
-                      <input type="time" className="modern-input" defaultValue="08:09" style={{ flex: 0.8, minWidth: '0' }} />
+                      <input type="date" className="modern-input" defaultValue="2026-03-23" style={{ flex: 1.2, minWidth: '0' }} disabled={!isEdit} />
+                      <input type="time" className="modern-input" defaultValue="08:09" style={{ flex: 0.8, minWidth: '0' }} disabled={!isEdit} />
                     </div>
                   </div>
                   <div className="form-field">
                     <label>Phương pháp khám bệnh</label>
-                    <select className="modern-select"><option>Tây y</option><option>Đông y</option><option>Kết hợp</option></select>
+                    <select className="modern-select" disabled={!isEdit}><option>Tây y</option><option>Đông y</option><option>Kết hợp</option></select>
                   </div>
                   <div className="form-field" style={{ gridColumn: 'span 2' }}>
                     <label>Ghi chú kết luận</label>
-                    <input type="text" className="modern-input" placeholder="Nhập ghi chú cuối cùng..." />
+                    <input type="text" className="modern-input" placeholder="Nhập ghi chú cuối cùng..." disabled={!isEdit} />
                   </div>
                 </div>
               </div>
@@ -443,7 +462,7 @@ const Examination = () => {
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb' }}>Chi định dịch vụ</h3>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button className="btn btn-outline btn-sm"><Printer size={16} /> In phiếu</button>
-                    <button className="btn btn-primary btn-sm" onClick={() => setShowServiceOrder(true)}><Plus size={16} /> Thêm chỉ định</button>
+                    {isEdit && <button className="btn btn-primary btn-sm" onClick={() => setShowServiceOrder(true)}><Plus size={16} /> Thêm chỉ định</button>}
                   </div>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
@@ -507,7 +526,7 @@ const Examination = () => {
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb', margin: 0 }}>Kê đơn thuốc</h3>
                   <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <button className="btn btn-outline" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', background: '#fff' }}><Printer size={16} /> In phiếu</button>
-                    <button className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }} onClick={() => setShowPrescriptionOrder(true)}><Plus size={16} /> Thêm thuốc</button>
+                    {isEdit && <button className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }} onClick={() => setShowPrescriptionOrder(true)}><Plus size={16} /> Thêm thuốc</button>}
                   </div>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
@@ -1511,6 +1530,35 @@ const Examination = () => {
           </div>
         </div>
       )}
+      <ConfirmationModal 
+        isOpen={showSaveConfirm}
+        onClose={() => setShowSaveConfirm(false)}
+        onConfirm={() => { setIsEdit(false); setViewMode('list'); }}
+        title="Lưu hồ sơ khám bệnh"
+        message="Bạn có chắc chắn muốn lưu các thông tin khám bệnh này không?"
+        type="success"
+        confirmText="Lưu ngay"
+      />
+
+      <ConfirmationModal 
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={() => setViewMode('list')}
+        title="Xóa hồ sơ khám"
+        message="Hành động này sẽ xóa vĩnh viễn hồ sơ này. Bạn có chắc chắn không?"
+        type="danger"
+        confirmText="Xác nhận xóa"
+      />
+
+      <ConfirmationModal 
+        isOpen={showUndoConfirm}
+        onClose={() => setShowUndoConfirm(false)}
+        onConfirm={() => {}}
+        title="Hủy xác nhận chi phí"
+        message="Bạn có chắc chắn muốn hủy xác nhận chi phí cho bệnh nhân này không?"
+        type="warning"
+        confirmText="Xác nhận hủy"
+      />
     </div>
   );
 };

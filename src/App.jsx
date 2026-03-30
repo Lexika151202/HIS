@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { 
+import {
   Home, Users, Syringe, Database, Bell, CreditCard, Settings, Layout, Calendar,
   Package, ClipboardList, ArrowLeftRight, Layers, MessageSquare, ShieldCheck, Stethoscope, Plus,
   FileText, Activity
 } from 'lucide-react';
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell 
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell
 } from 'recharts';
 
 // --- Page Imports ---
@@ -45,7 +45,7 @@ const sampleDistribution = [
 const NavLink = ({ to, icon: Icon, label }) => {
   const location = useLocation();
   const isActive = to === '/' ? location.pathname === '/' : location.pathname.startsWith(to);
-  
+
   return (
     <Link to={to} className={`nav-link ${isActive ? 'active' : ''}`}>
       <Icon size={20} />
@@ -64,38 +64,30 @@ const Sidebar = ({ role, onLogout }) => {
 
       <div style={{ flex: 1 }}>
         {role === 'staff' && (
-          <>
-            <div className="nav-group">
-              <p className="nav-label">Chính</p>
-              <NavLink to="/" icon={Home} label="Tổng quan" />
-            </div>
-
-            <div className="nav-group">
-              <p className="nav-label">Quản lý HIS</p>
-              <NavLink to="/his/reception" icon={Users} label="Tiếp đón" />
-              <NavLink to="/his/registration-list" icon={ClipboardList} label="Danh sách đăng ký" />
-              <NavLink to="/his/exam" icon={Stethoscope} label="Khám bệnh ngoại trú" />
-            </div>
-          </>
+          <div className="nav-group">
+            <NavLink to="/his/reception" icon={Users} label="Tiếp đón" />
+            <NavLink to="/his/registration-list" icon={ClipboardList} label="Danh sách đăng ký" />
+            <NavLink to="/his/exam" icon={Stethoscope} label="Khám bệnh ngoại trú" />
+          </div>
         )}
 
         {role === 'admin' && (
           <>
-            <div className="nav-group">
-              <p className="nav-label">Phân quyền</p>
-              <NavLink to="/admin/permissions" icon={ShieldCheck} label="D.Sách Phân quyền" />
-            </div>
+            {/* <div className="nav-group"> */}
+            {/* <p className="nav-label">Phân quyền</p> */}
+            <NavLink to="/admin/permissions" icon={ShieldCheck} label="Phân quyền" />
+            {/* </div> */}
 
-            <div className="nav-group">
-              <p className="nav-label">Người dùng</p>
-              <NavLink to="/admin/users" icon={Users} label="D.Sách Người dùng" />
-            </div>
+            {/* <div className="nav-group"> */}
+            {/* <p className="nav-label">Người dùng</p> */}
+            <NavLink to="/admin/users" icon={Users} label="Người dùng" />
+            {/* </div> */}
           </>
         )}
       </div>
 
       <div className="nav-group" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', padding: '1rem' }}>
-        <button 
+        <button
           onClick={onLogout}
           style={{ width: '100%', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', color: '#ef4444', padding: '0.75rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 600 }}
         >
@@ -207,7 +199,7 @@ function App() {
           <Routes>
             {/* Common Route */}
             <Route path="/" element={<Dashboard />} />
-            
+
             {/* Staff Routes */}
             {userRole === 'staff' && (
               <>
@@ -221,9 +213,12 @@ function App() {
             {userRole === 'admin' && (
               <>
                 <Route path="/admin/permissions" element={<PermissionList />} />
-                <Route path="/admin/permissions/detail/:id" element={<PermissionDetail />} />
-                <Route path="/admin/users" element={<UserList />} />
-                <Route path="/admin/users/detail/:id" element={<UserDetail />} />
+          <Route path="/admin/permissions/new" element={<PermissionDetail />} />
+          <Route path="/admin/permissions/detail/:id" element={<PermissionDetail />} />
+          
+          <Route path="/admin/users" element={<UserList />} />
+          <Route path="/admin/users/new" element={<UserDetail />} />
+          <Route path="/admin/users/detail/:id" element={<UserDetail />} />
               </>
             )}
           </Routes>
