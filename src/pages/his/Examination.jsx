@@ -463,7 +463,7 @@ const Examination = () => {
                   {['Mạch', 'Nhiệt độ', 'HA (min)', 'HA (max)', 'Nhịp thở', 'Cân nặng'].map((l, i) => (
                     <div key={i} style={{ padding: '1rem 0.5rem', background: '#f8fafc', borderRadius: '12px', textAlign: 'center' }}>
                       <label style={{ fontSize: '0.7rem', color: '#64748b', display: 'block', marginBottom: '6px' }}>{l}</label>
-                      <input type="text" className="modern-input" style={{ width: '80%', textAlign: 'center', fontWeight: 700, border: 'none', background: 'transparent' }} placeholder="..." />
+                      <input type="text" className="modern-input" style={{ width: '80%', textAlign: 'center', fontWeight: 700, border: 'none', background: 'transparent' }} placeholder="..." disabled={!isEdit} />
                     </div>
                   ))}
                 </div>
@@ -475,7 +475,9 @@ const Examination = () => {
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb' }}>Chi định dịch vụ</h3>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button className="btn btn-outline btn-sm"><Printer size={16} /> In phiếu</button>
-                    <button className="btn btn-primary btn-sm" onClick={() => setShowServiceOrder(true)}><Plus size={16} /> Thêm chỉ định</button>
+                    {isEdit && (
+                      <button className="btn btn-primary btn-sm" onClick={() => setShowServiceOrder(true)}><Plus size={16} /> Thêm chỉ định</button>
+                    )}
                   </div>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
@@ -539,7 +541,9 @@ const Examination = () => {
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb', margin: 0 }}>Kê đơn thuốc</h3>
                   <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <button className="btn btn-outline" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', background: '#fff' }}><Printer size={16} /> In phiếu</button>
-                    <button className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }} onClick={() => setShowPrescriptionOrder(true)}><Plus size={16} /> Thêm thuốc</button>
+                    {isEdit && (
+                      <button className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }} onClick={() => setShowPrescriptionOrder(true)}><Plus size={16} /> Thêm thuốc</button>
+                    )}
                   </div>
                 </div>
                 <div style={{ overflowX: 'auto' }}>

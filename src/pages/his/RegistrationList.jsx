@@ -365,7 +365,7 @@ const RegistrationList = () => {
                     </button>
                   )}
 
-                  {detailMode === 'examination' && (
+                  {detailMode === 'examination' && selectedPatient?.hasRecord && (
                     <>
                       <button
                         className="btn btn-outline"
@@ -392,12 +392,19 @@ const RegistrationList = () => {
 
               {/* Action Buttons Handling */}
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                {isEdit ? (
+                {(isEdit || (detailMode === 'examination' && !selectedPatient?.hasRecord)) ? (
                   <>
                     <button
                       className="btn btn-outline"
                       style={{ height: '42px', padding: '0 1.5rem', borderRadius: '12px', background: '#fff', fontWeight: 600 }}
-                      onClick={() => setIsEdit(false)}
+                      onClick={() => {
+                        if (detailMode === 'examination' && !selectedPatient?.hasRecord) {
+                          setDetailMode('overview');
+                        } else {
+                          setIsEdit(false);
+                        }
+                        setShowActionDropdown(false);
+                      }}
                     >
                       Hủy
                     </button>
@@ -417,9 +424,6 @@ const RegistrationList = () => {
                   </>
                 ) : (
                   <>
-                    {/* Only show 'Lưu' without 'Thao tác' if it's a completely new entry without a record (if your logic requires this) */}
-                    {/* But in this screen, we are usually viewing/editing existing registrations from the list. */}
-                    
                     <div style={{ position: 'relative' }}>
                       <button
                         className="btn btn-outline"
@@ -802,7 +806,7 @@ const RegistrationList = () => {
                       </div>
                       <div className="form-field" style={{ gridColumn: 'span 2' }}>
                         <label>Ghi chú kết luận</label>
-                        <input type="text" className="modern-input" placeholder="Ghi chú kết luận..." />
+                        <input type="text" className="modern-input" placeholder="Ghi chú kết luận..." disabled={!(isEdit || (detailMode === 'examination' && !selectedPatient?.hasRecord))} />
                       </div>
                     </div>
                   </div>
@@ -829,7 +833,9 @@ const RegistrationList = () => {
                       <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb' }}>Chỉ định dịch vụ</h3>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button className="btn btn-outline btn-sm"><Printer size={16} /> In phiếu</button>
-                        <button className="btn btn-primary btn-sm" onClick={() => setShowServiceOrder(true)}><Plus size={16} /> Thêm chỉ định</button>
+                        {(isEdit || (detailMode === 'examination' && !selectedPatient?.hasRecord)) && (
+                          <button className="btn btn-primary btn-sm" onClick={() => setShowServiceOrder(true)}><Plus size={16} /> Thêm chỉ định</button>
+                        )}
                       </div>
                     </div>
                     <div style={{ overflowX: 'auto' }}>
@@ -899,7 +905,9 @@ const RegistrationList = () => {
                       <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb', margin: 0 }}>Kê đơn thuốc</h3>
                       <div style={{ display: 'flex', gap: '0.75rem' }}>
                         <button className="btn btn-outline" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', background: '#fff' }}><Printer size={16} /> In phiếu</button>
-                        <button className="btn btn-primary" onClick={() => setShowPrescriptionOrder(true)} style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Plus size={16} /> Thêm thuốc</button>
+                        {(isEdit || (detailMode === 'examination' && !selectedPatient?.hasRecord)) && (
+                          <button className="btn btn-primary" onClick={() => setShowPrescriptionOrder(true)} style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Plus size={16} /> Thêm thuốc</button>
+                        )}
                       </div>
                     </div>
                     <div style={{ overflowX: 'auto' }}>
