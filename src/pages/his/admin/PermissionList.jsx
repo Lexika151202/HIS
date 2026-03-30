@@ -151,12 +151,12 @@ const PermissionList = () => {
   const ActionMenu = ({ id, index }) => (
     <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
       <button onClick={(e) => { e.stopPropagation(); setShowDropdown(showDropdown === index ? null : index); }}
-        style={{ 
-          display: 'flex', alignItems: 'center', justifyContent: 'center', 
-          width: '25px', height: '25px', 
-          background: showDropdown === index ? '#eff6ff' : '#fff', 
-          border: '1px solid #e2e8f0', borderRadius: '50%', 
-          color: '#64748b', transition: 'all 0.2s', 
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: '25px', height: '25px',
+          background: showDropdown === index ? '#eff6ff' : '#fff',
+          border: '1px solid #e2e8f0', borderRadius: '50%',
+          color: '#64748b', transition: 'all 0.2s',
           cursor: 'pointer', padding: 0, outline: 'none'
         }}>
         <MoreHorizontal size={14} strokeWidth={2.5} />
@@ -210,7 +210,7 @@ const PermissionList = () => {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
-              <th style={{ padding: '12px 16px', textAlign: 'center', fontSize: '0.8rem', color: '#64748b', textTransform: 'uppercase', width: '12%' }}>Hành động</th>
+              <th style={{ padding: '12px 16px', textAlign: 'center', fontSize: '0.8rem', color: '#64748b', textTransform: 'uppercase', width: '12%' }}>Thao tác</th>
               <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '0.8rem', color: '#64748b', textTransform: 'uppercase', width: '20%' }}>Mã quyền</th>
               <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '0.8rem', color: '#64748b', textTransform: 'uppercase' }}>Tên quyền</th>
               <th style={{ padding: '12px 20px', textAlign: 'center', fontSize: '0.8rem', color: '#64748b', textTransform: 'uppercase', width: '15%' }}>Số User</th>

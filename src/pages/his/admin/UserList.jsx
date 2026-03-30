@@ -313,12 +313,12 @@ const UserList = () => {
   const ActionMenu = ({ user, index }) => (
     <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
       <button onClick={(e) => { e.stopPropagation(); setShowDropdown(showDropdown === index ? null : index); }}
-        style={{ 
-          display: 'flex', alignItems: 'center', justifyContent: 'center', 
-          width: '25px', height: '25px', 
-          background: showDropdown === index ? '#eff6ff' : '#fff', 
-          border: '1px solid #e2e8f0', borderRadius: '50%', 
-          color: '#64748b', transition: 'all 0.2s', 
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: '25px', height: '25px',
+          background: showDropdown === index ? '#eff6ff' : '#fff',
+          border: '1px solid #e2e8f0', borderRadius: '50%',
+          color: '#64748b', transition: 'all 0.2s',
           cursor: 'pointer', padding: 0, outline: 'none'
         }}>
         <MoreHorizontal size={14} strokeWidth={2.5} />
@@ -391,7 +391,7 @@ const UserList = () => {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
-              <th style={{ padding: '12px 16px', textAlign: 'center', fontSize: '0.8rem', color: '#475569', textTransform: 'uppercase', width: '10%' }}>Hành động</th>
+              <th style={{ padding: '12px 16px', textAlign: 'center', fontSize: '0.8rem', color: '#475569', textTransform: 'uppercase', width: '10%' }}>Thao tác</th>
               <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '0.8rem', color: '#475569', textTransform: 'uppercase', width: '20%' }}>Họ tên</th>
               <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '0.8rem', color: '#475569', textTransform: 'uppercase' }}>Tên đăng nhập</th>
               <th style={{ padding: '12px 20px', textAlign: 'center', fontSize: '0.8rem', color: '#475569', textTransform: 'uppercase', width: '18%' }}>Quyền hạn</th>
