@@ -81,8 +81,17 @@ async function main() {
   c.push(h2('UC-S02: Thêm mới tiếp đón bệnh nhân'));
   c.push(ucTbl([['ID','UC-S02'],['Tên','Thêm mới tiếp đón bệnh nhân'],['Actor','Nhân viên Tiếp đón'],['Precondition','Đã đăng nhập role staff'],['Postcondition','Tạo bản ghi đăng ký mới, form reset'],['URL','/his/reception'],['Ưu tiên','Cao']]));
   c.push(...await imgPara('fsd_reception_1774948548615.png','Hình UC-S02: Màn hình Tiếp đón Bệnh nhân'));
-  c.push(bp('Thành phần UI (37 thành phần):'));
-  c.push(tbl(['Section','Thành phần','Mô tả'],[['Header','Tiêu đề + Nút Làm mới (F5) + Nút Lưu & Tiếp đón','Action bar'],['Tìm kiếm','Input full-width + Nút Quét CCCD + Nút Quét mã thẻ','Tìm Mã BN/Họ tên/CMND'],['TT Thẻ BHYT','Đối tượng, Trẻ em, Số thẻ, Nơi ĐKKCB, Hiệu lực, Loại tuyến, Khu vực, Hình thức BH','11 fields'],['TT Hành chính','Mã BN (auto), Họ tên*, Giới tính, NS, SĐT, Dân tộc, Quốc tịch, Nghề nghiệp, Địa chỉ...','16 fields'],['Panel phải','Card Thống kê phòng + Card Đăng ký + Card LS khám + Card LS BHYT','4 sidebar cards']],[15,40,45]));
+  c.push(bp('Mô tả màn hình chi tiết:'));
+  c.push(h3('Header'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['1','Tiêu đề','Heading','"Tiếp đón Bệnh nhân" + mô tả phụ'],['2','Nút Làm mới (F5)','Button (outline)','Reset toàn bộ form'],['3','Nút Lưu & Tiếp đón','Button (Primary)','Submit tạo bản ghi tiếp đón']],[5,25,18,52]));
+  c.push(h3('Thanh tìm kiếm'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['4','Tìm kiếm nhanh','Input (search, full-width)','"Nhập Mã BN, Họ tên, CMND hoặc Quét thẻ BHYT..."'],['5','Nút Quét CCCD','Button (Primary)','Kích hoạt đầu đọc CCCD'],['6','Nút Quét mã thẻ','Button (Outline)','Kích hoạt QR/barcode reader']],[5,25,18,52]));
+  c.push(h3('Section: Thông tin thẻ BHYT'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['7','Đối tượng','Select','BHYT / Viện phí / Miễn phí'],['8','Trẻ em không thẻ','Checkbox','Toggle'],['9','Số thẻ BHYT','Input (masked)','Format: __ - __ - ___ - ___'],['10','Nơi ĐKKCB ban đầu','Select','Mã CSKCB'],['11','Hiệu lực (Từ ngày)','Date','mm/dd/yyyy'],['12','Đến ngày','Date','mm/dd/yyyy'],['13','Đủ 5 năm','Date','mm/dd/yyyy'],['14','Loại tuyến','Select','Đúng tuyến / Trái tuyến'],['15','Khu vực','Select','Bình thường / K1/K2/K3'],['16','Ngày miễn cùng chi trả','Date',''],['17','Hình thức bảo hiểm','Checkboxes','Chuyển tuyến, Cấp cứu, Nơi khác đến']],[5,25,18,52]));
+  c.push(h3('Section: Thông tin hành chính'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['18','Mã bệnh nhân','Input (readonly)','Tự sinh, VD: BN20240001'],['19','Họ và tên bệnh nhân*','Input (text)','Bắt buộc'],['20','Giới tính','Button Group','Nam / Nữ / Khác'],['21','Ngày sinh','Date','dd/mm/yyyy'],['22','Tuổi','Input (readonly)','Tự tính từ ngày sinh'],['23','Số điện thoại','Input',''],['24','Số thẻ lao động','Input',''],['25','Dân tộc','Select','Kinh, Tày, Thái...'],['26','Quốc tịch','Select','Việt Nam...'],['27','Nghề nghiệp','Select',''],['28','Nơi làm việc','Input',''],['29','Khoa / Phòng BN','Input',''],['30','Địa chỉ thường trú','Input',''],['31','Tỉnh / Thành phố','Select',''],['32','Phường / Xã','Select',''],['33','Thôn / Xóm','Input','']],[5,25,18,52]));
+  c.push(h3('Panel phải'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['34','Card: Thông tin tiếp đón','Table Card','Phòng khám / Tổng BN / Đang chờ'],['35','Card: Các lần đăng ký','Sidebar Card + ↗','"Chưa chọn bệnh nhân" → Click ↗ mở modal'],['36','Card: Lịch sử khám bệnh','Sidebar Card + ↗','Click ↗ mở modal lịch sử'],['37','Card: Lịch sử sử dụng BHYT','Sidebar Card + ↗','Click ↗ mở modal BHYT']],[5,25,18,52]));
   c.push(bp('Luồng chính:'));
   c.push(step(1,'Truy cập Tiếp đón → Form trống, Mã BN tự sinh.'));
   c.push(step(2,'Nhập thông tin BHYT + hành chính (hoặc Quét CCCD → auto-fill).'));
@@ -110,7 +119,15 @@ async function main() {
   c.push(h2('UC-S05: Xem chi tiết thông tin đăng ký'));
   c.push(ucTbl([['ID','UC-S05'],['Actor','NV Tiếp đón, Điều dưỡng, Bác sĩ'],['Precondition','Đã chọn BN từ UC-S04'],['Postcondition','Hiển thị đầy đủ TT đăng ký + BHYT + hành chính']]));
   c.push(...await imgPara('fsd_registration_detail_1774948562936.png','Hình UC-S05: Chi tiết đăng ký'));
-  c.push(tbl(['#','Thành phần','Mô tả'],[['1','Breadcrumb','"Danh sách đăng ký > Chi tiết đăng ký"'],['2-5','Action Bar (View)','In phiếu | Thanh toán (→S08) | Khám bệnh (→S17/S18) | Dropdown Thao tác'],['6-7','Action Bar (Edit)','Chỉ Hủy + Lưu (ẩn tất cả nút khác)'],['8-13','Section TT Đăng ký','Số TN, STT, Ngày/Giờ, Dịch vụ, Phòng khám'],['','Section TT BHYT + Hành chính','Giống UC-S02 (mục 7-33)'],['14-17','Panel phải','Thống kê + Card ĐK (→S16.1) + Card LS khám (→S16.2) + Card BHYT (→S16.3)']],[5,28,67]));
+  c.push(bp('Mô tả màn hình chi tiết:'));
+  c.push(h3('Action Bar'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['1','Breadcrumb','Navigation','"Danh sách đăng ký > Chi tiết đăng ký"'],['2','Nút In phiếu','Button (outline)','In phiếu đăng ký'],['3','Nút Thanh toán','Button (outline)','→ UC-S08'],['4','Nút Khám bệnh','Button (outline)','→ UC-S17 (mới) / UC-S18 (đã có)'],['5','Dropdown Thao tác','Menu','Chỉnh sửa (→S06), Xóa (→S07)'],['—','(Edit Mode)','','Chỉ hiện Hủy + Lưu, ẩn tất cả nút trên']],[5,22,18,55]));
+  c.push(h3('Section: Thông tin đăng ký'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['6','Số tiếp nhận','Input (readonly)','Mã tiếp nhận'],['7','STT','Input (readonly)','Số thứ tự'],['8','Ngày vào viện','Date',''],['9','Giờ vào viện','Time',''],['10','Dịch vụ','Select','Loại dịch vụ khám'],['11','Phòng khám','Select','Phòng khám chỉ định']],[5,22,18,55]));
+  c.push(p('Section TT Thẻ BHYT: Giống UC-S02 (mục 7-17 — 11 trường)', { italics: true }));
+  c.push(p('Section TT Hành chính: Giống UC-S02 (mục 18-33 — 16 trường)', { italics: true }));
+  c.push(h3('Panel phải'));
+  c.push(tbl(['#','Thành phần','Mô tả'],[['12','Card: Thông tin tiếp đón','Bảng thống kê BN theo phòng'],['13','Card: Các lần đăng ký','Tóm tắt + icon ↗ → UC-S16.1'],['14','Card: Lịch sử khám bệnh','Tóm tắt + icon ↗ → UC-S16.2'],['15','Card: Lịch sử sử dụng BHYT','Tóm tắt + icon ↗ → UC-S16.3']],[5,30,65]));
   c.push(bp('Luồng chính:'));
   c.push(step(1,'Click row từ UC-S04 → Hiển thị chi tiết readonly.'));
   c.push(step(2,'Actor chọn action: In phiếu / Thanh toán / Khám bệnh / Chỉnh sửa / Xóa.'));
@@ -132,7 +149,14 @@ async function main() {
   c.push(h2('UC-S08: Thanh toán viện phí'));
   c.push(ucTbl([['ID','UC-S08'],['Actor','NV Tiếp đón, Thu ngân'],['Precondition','Đang ở UC-S05 hoặc icon 💰 từ UC-S04'],['Postcondition','Xác nhận thanh toán viện phí']]));
   c.push(...await imgPara('payment_view_1774862525307.png','Hình UC-S08: Thanh toán viện phí'));
-  c.push(tbl(['#','Thành phần','Mô tả'],[['1','Breadcrumb','"... > Chi tiết đăng ký > Thanh toán"'],['2','Nút Xác nhận','Button Primary green'],['3','Card TT cá nhân','Số TN, Mã BN, Họ tên, Địa chỉ, BHYT, Đối tượng'],['4','Card Thanh toán','Ngày thu (Date), Hình thức (Select)'],['5','Card Chứng từ','Số quyển, Số biên lai'],['6','Bảng chi phí','STT, Dịch vụ, SL, Đơn giá, Thành tiền, BHYT, BN Trả']],[5,25,70]));
+  c.push(bp('Mô tả màn hình chi tiết:'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['1','Breadcrumb','Navigation','"... > Chi tiết đăng ký > Thanh toán"'],['2','Nút Xác nhận','Button (Primary, green)','Xác nhận thanh toán'],['3','Dropdown Thao tác','Menu','Chỉnh sửa, Xóa']],[5,22,18,55]));
+  c.push(h3('Card: Thông tin cá nhân'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['4','Số tiếp nhận','Text (readonly)',''],['5','Mã BN','Text (readonly)',''],['6','Họ tên','Text (bold, uppercase)',''],['7','Địa chỉ','Text',''],['8','BHYT','Text','Số thẻ BHYT'],['9','Đối tượng','Badge','BHYT / Viện phí']],[5,22,18,55]));
+  c.push(h3('Card: Thanh toán + Chứng từ'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['10','Ngày thu','Date','Ngày thanh toán'],['11','Hình thức','Select','Tiền mặt / Chuyển khoản'],['12','Số quyển','Input','Số quyển biên lai'],['13','Số biên lai','Input','Mã biên lai']],[5,22,18,55]));
+  c.push(h3('Bảng chi phí'));
+  c.push(tbl(['Cột','Mô tả'],[['STT','Số thứ tự'],['Dịch vụ','Tên dịch vụ khám/CLS'],['SL','Số lượng'],['Đơn giá','VNĐ'],['Thành tiền','SL × Đơn giá'],['BHYT','Số tiền BHYT chi trả'],['BN Trả','Số tiền bệnh nhân trả']],[30,70]));
   c.push(bp('Luồng chính:'));
   c.push(step(1,'Navigate → Hiển thị bảng chi phí + thông tin BN.'));
   c.push(step(2,'Điền ngày thu, hình thức, chứng từ.'));
@@ -171,23 +195,36 @@ async function main() {
   c.push(h2('UC-S11: Xem danh sách khám bệnh ngoại trú'));
   c.push(ucTbl([['ID','UC-S11'],['Actor','Bác sĩ, Điều dưỡng'],['URL','/his/examination']]));
   c.push(...await imgPara('fsd_outpatient_list_1774948579117.png','Hình UC-S11: Danh sách khám bệnh ngoại trú'));
-  c.push(p('Bộ lọc: Thời gian, Khoa/PB, Trạng thái, Loại HS, TT BN. Click row → UC-S12.'));
+  c.push(bp('Mô tả màn hình chi tiết:'));
+  c.push(h3('Bộ lọc'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['1','Thời gian (Từ - Đến)','2x Date','Khoảng ngày lọc'],['2','Khoa / Phòng ban','Select',''],['3','Trạng thái','Select','Đã XN / Chưa XN'],['4','Loại hồ sơ','Select',''],['5','Thông tin BN','Input (text)','Mã BN, Họ tên'],['6','Nút Tìm kiếm','Button (Primary)','']],[5,22,18,55]));
+  c.push(h3('Data Table'));
+  c.push(tbl(['Cột','Mô tả'],[['Thao tác','Icon: Hủy xác nhận (RotateCcw)'],['STT khám','Số thứ tự khám'],['Mã BN','Mã bệnh nhân'],['Tên BN','Họ và tên'],['Giới tính','Nam/Nữ'],['Năm sinh','Number'],['Đối tượng','Badge (BHYT/VP)'],['Số thẻ BHYT','Text'],['Xác nhận','Badge (Đã XN xanh / Chưa XN vàng)'],['Ngày yêu cầu','DateTime'],['Phòng khám','Text']],[30,70]));
+  c.push(p('Hành vi: Click dòng → UC-S12.'));
 
   // UC-S12
   c.push(h2('UC-S12: Xem chi tiết khám bệnh'));
   c.push(ucTbl([['ID','UC-S12'],['Actor','Bác sĩ'],['Precondition','Chọn BN từ UC-S11 hoặc UC-S18'],['Postcondition','Hiển thị đầy đủ hồ sơ khám bệnh']]));
   c.push(...await imgPara('fsd_outpatient_detail_1774948587071.png','Hình UC-S12: Chi tiết khám bệnh (phần trên)'));
   c.push(...await imgPara('fsd_exam_services_prescriptions_1774948572476.png','Hình UC-S12b: Chỉ định dịch vụ + Kê đơn thuốc'));
-  c.push(tbl(['Section','Thành phần (số fields)','Ghi chú'],[
-    ['Action Bar (View)','Hủy XN chi phí | In phiếu | Dropdown (Sửa, Xóa)',''],
-    ['Action Bar (Edit)','Chỉ Hủy + Lưu','Ẩn tất cả nút khác'],
-    ['Header Info Bar','Mã BN, Họ tên, GT, NS, BHYT','Readonly'],
-    ['TT Khám bệnh','18 fields: Ngày/Giờ, PK, Triệu chứng, Lý do, Bệnh chính ICD10, Bệnh kèm, Tư vấn, Diễn biến, Tai nạn, Kết quả, Loại KCB, BS, Kết thúc, PP, Ghi chú',''],
-    ['Chỉ số sinh tồn','6 fields: Mạch, Nhiệt độ, HA min/max, Nhịp thở, Cân nặng','Card compact'],
-    ['Chỉ định DV','Nút In + Nút Thêm chỉ định (→S09) + Bảng','Nút LUÔN hiện'],
-    ['Kê đơn thuốc','Nút In + Nút Thêm thuốc (→S10) + Bảng','Nút LUÔN hiện'],
-    ['Panel phải','Timeline 3 đợt + Nút "Xem tất cả LS" (→S19)',''],
-  ],[18,52,30]));
+  c.push(bp('Mô tả màn hình chi tiết:'));
+  c.push(h3('Action Bar'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['1','Nút Hủy xác nhận chi phí','Button (outline, danger)','Hủy trạng thái XN'],['2','Nút In phiếu','Button (outline)','In phiếu kết quả'],['3','Dropdown Thao tác','Menu','Chỉnh sửa (→S13), Xóa'],['—','(Edit Mode)','','Chỉ Hủy + Lưu, ẩn tất cả nút trên']],[5,25,18,52]));
+  c.push(h3('Header Info Bar'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['4','Mã BN','Text (bold)','Readonly'],['5','Họ và tên','Text (bold)',''],['6','Giới tính','Text',''],['7','Ngày sinh','Date',''],['8','BHYT','Text (blue, bold)','Số thẻ + (Loại)']],[5,25,18,52]));
+  c.push(h3('Section: Thông tin khám bệnh (18 trường)'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['9','Ngày vào khám','Date',''],['10','Giờ vào viện','Time',''],['11','Phòng khám','Select',''],['12','Triệu chứng / Diễn biến','Textarea',''],['13','Lý do vào viện','Textarea',''],['14','Bệnh chính (ICD10)','Select','Mã ICD-10'],['15','Diễn giải bệnh chính','Input',''],['16','Bệnh kèm theo','Multi-select tags','Nhiều mã ICD'],['17','Diễn giải bệnh kèm theo','Input',''],['18','Tư vấn điều trị','Textarea',''],['19','Diễn biến điều trị','Textarea',''],['20','Loại tai nạn','Select',''],['21','Kết quả khám','Select','Không thay đổi/Khỏi/Đỡ'],['22','Loại khám chữa bệnh','Select',''],['23','Bác sĩ khám','Select',''],['24','Kết thúc khám (Ngày)','Date',''],['25','Kết thúc khám (Giờ)','Time',''],['26','Phương pháp khám','Select','Tây y/Đông y/Kết hợp'],['27','Ghi chú kết luận','Input','']],[5,25,18,52]));
+  c.push(h3('Section: Chỉ số sinh tồn (6 trường)'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['28','Mạch','Input (number)','Nhịp/phút'],['29','Nhiệt độ','Input (number)','°C'],['30','Huyết áp (min)','Input (number)','mmHg'],['31','Huyết áp (max)','Input (number)','mmHg'],['32','Nhịp thở','Input (number)','Lần/phút'],['33','Cân nặng','Input (number)','kg']],[5,25,18,52]));
+  c.push(h3('Section: Chỉ định dịch vụ'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['34','Nút In phiếu','Button (outline)','In phiếu chỉ định'],['35','Nút Thêm chỉ định','Button (Primary)','→ UC-S09 (LUÔN hiện, không cần Edit Mode)']],[5,25,18,52]));
+  c.push(tbl(['Cột bảng','Mô tả'],[['STT','Số thứ tự'],['Tên dịch vụ','Tên DV CLS'],['Ngày yêu cầu','DateTime'],['Loại giá','Badge (Giá BHYT / Giá VP)'],['SL','Số lượng'],['Đơn giá','VNĐ'],['Thành tiền','SL × Đơn giá'],['BHYT trả','Số tiền BHYT'],['BN trả','Số tiền BN'],['Bác sĩ','BS chỉ định'],['Trạng thái','Checkbox (Kết quả ✓, Viện phí ✓)']],[30,70]));
+  c.push(h3('Section: Kê đơn thuốc'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['36','Nút In phiếu','Button (outline)','In đơn thuốc'],['37','Nút Thêm thuốc','Button (Primary)','→ UC-S10 (LUÔN hiện, không cần Edit Mode)']],[5,25,18,52]));
+  c.push(tbl(['Cột bảng','Mô tả'],[['STT','Số thứ tự'],['Tên thuốc','Tên thương mại'],['Hàm lượng','Hoạt chất + nồng độ'],['SL','Số lượng (tự tính)'],['Ngày','Số ngày uống'],['Cách dùng','VD: Uống sau ăn'],['Nơi mua','Tại BV / Mua ngoài']],[30,70]));
+  c.push(h3('Panel phải: Lịch sử khám bệnh'));
+  c.push(tbl(['#','Thành phần','Mô tả'],[['38','Timeline 3 đợt gần nhất','Card: Ngày, Phòng khám, Chẩn đoán ICD (đỏ)'],['39','Nút "Xem tất cả lịch sử"','Button (outline) → UC-S19']],[5,30,65]));
+  c.push(p('Lưu ý: Nút Thêm chỉ định (#35) và Thêm thuốc (#37) LUÔN hiện khi bản ghi tồn tại — không ẩn trong Edit Mode.', { bold: true, color: 'DC2626' }));
 
   // UC-S13,14,15
   c.push(h2('UC-S13: Chỉnh sửa kết quả khám'));
@@ -239,7 +276,10 @@ async function main() {
   c.push(h2('UC-A01: Xem danh sách quyền'));
   c.push(ucTbl([['Actor','Quản trị viên'],['URL','/admin/permissions']]));
   c.push(...await imgPara('fsd_permission_list_1774948487454.png','Hình UC-A01: Danh sách phân quyền'));
-  c.push(p('Bảng: Thao tác (⋯) | Mã quyền (link) | Tên quyền | Số User | Trạng thái (Badge). Click row → UC-A03.'));
+  c.push(bp('Mô tả màn hình chi tiết:'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['1','Ô tìm kiếm','Input (search)','"Tìm kiếm theo mã hoặc tên quyền..."'],['2','Nút Tìm kiếm','Button (Primary)',''],['3','Nút Thêm quyền mới','Button (Primary, outline)','→ UC-A02 (modal)']],[5,25,18,52]));
+  c.push(tbl(['Cột','Mô tả'],[['Thao tác','Menu ⋯ (Sửa, Xóa)'],['Mã quyền','Text (link, blue) — VD: ADM001'],['Tên quyền','Text — VD: Quản trị hệ thống'],['Số User','Number — Số người dùng thuộc nhóm'],['Trạng thái','Badge (Hoạt động: xanh lá)']],[30,70]));
+  c.push(p('Hành vi: Click dòng → UC-A03.'));
 
   c.push(h2('UC-A02: Thêm nhóm quyền mới'));
   c.push(ucTbl([['Trigger','Nút "Thêm quyền mới"'],['Postcondition','Tạo nhóm quyền mới']]));
@@ -248,7 +288,13 @@ async function main() {
 
   c.push(h2('UC-A03: Xem chi tiết phân quyền'));
   c.push(...await imgPara('fsd_permission_detail_1774948494239.png','Hình UC-A03: Chi tiết phân quyền'));
-  c.push(p('Thông tin: Mã quyền, Tên, Mô tả, Số user, Trạng thái, Ngày tạo. Cấu hình quyền theo module (tree checkbox).'));
+  c.push(bp('Mô tả màn hình chi tiết:'));
+  c.push(h3('Action Bar'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['1','Nút ← Back','Button (icon)','Quay về danh sách'],['2','Breadcrumb','Navigation','"Danh sách phân quyền > Chi tiết"'],['3','Nút Chỉnh sửa','Button (outline)','→ UC-A04'],['4','Nút Xóa','Button (outline, danger)','→ UC-A05']],[5,22,18,55]));
+  c.push(h3('Card: Thông tin nhóm quyền'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['5','Mã quyền','Text (readonly)','VD: ADM001'],['6','Tên nhóm quyền','Text / Input','VD: Quản trị hệ thống'],['7','Mô tả','Text / Textarea','Mô tả chức năng'],['8','Số lượng user','Number (readonly)','Tự tính'],['9','Trạng thái','Badge / Select','Hoạt động / Ngưng'],['10','Ngày tạo','Date (readonly)','']],[5,22,18,55]));
+  c.push(h3('Section: Cấu hình quyền theo Module'));
+  c.push(p('Tree checkbox theo cấu trúc Module > Chức năng > Quyền (Xem/Thêm/Sửa/Xóa). Các module: Tiếp đón, Đăng ký, Khám bệnh, Quản trị, Báo cáo.'));
 
   c.push(h2('UC-A04: Chỉnh sửa nhóm quyền'));
   c.push(p('Trigger: Nút Chỉnh sửa → Edit Mode (Hủy + Lưu) → Sửa → Lưu → ConfirmationModal.'));
@@ -268,7 +314,13 @@ async function main() {
 
   c.push(h2('UC-A08: Xem chi tiết người dùng'));
   c.push(...await imgPara('fsd_user_detail_1774948517070.png','Hình UC-A08: Chi tiết người dùng'));
-  c.push(p('Thông tin: Mã cơ sở, Mã user, Họ tên, Nhân viên, SĐT, Email, Trạng thái. Panel phải: Nhóm quyền truy cập.'));
+  c.push(bp('Mô tả màn hình chi tiết:'));
+  c.push(h3('Action Bar'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['1','Nút ← Back','Button (icon)','Quay về danh sách'],['2','Breadcrumb','Navigation','"Quản trị Người dùng > Hồ sơ"'],['3','Nút Đổi mật khẩu','Button (outline)','→ UC-A11'],['4','Nút Khóa tài khoản','Button (outline, warning)','→ UC-A10'],['5','Nút Xóa','Button (outline, danger)','→ UC-A12'],['6','Nút Chỉnh sửa','Button (outline)','→ UC-A09']],[5,22,18,55]));
+  c.push(h3('Card: Thông tin nhân sự'));
+  c.push(tbl(['#','Thành phần','Loại','Mô tả'],[['7','Mã cơ sở','Input (readonly)','VD: HIS_HN_01 (Tự sinh)'],['8','Mã user','Input (readonly)','VD: AD001'],['9','Mật khẩu','Input (password)','Ẩn ký tự'],['10','Họ tên*','Input (text)','Bắt buộc'],['11','Nhân viên','Select','Bác sĩ / Điều dưỡng / ...'],['12','Điện thoại','Input',''],['13','Email','Input (email)','VD: admin@his.vn'],['14','Trạng thái','Badge','Đang hoạt động (xanh) / Đã khóa (đỏ)']],[5,22,18,55]));
+  c.push(h3('Panel phải: Nhóm quyền truy cập'));
+  c.push(p('Danh sách các nhóm quyền đã gán cho user. Mỗi item: Tên nhóm + Mã nhóm. Radio button để chọn nhóm active.'));
 
   c.push(h2('UC-A09: Chỉnh sửa thông tin người dùng'));
   c.push(p('Nút Chỉnh sửa → Edit Mode (Hủy + Lưu) → Sửa fields → Lưu → ConfirmationModal.'));
